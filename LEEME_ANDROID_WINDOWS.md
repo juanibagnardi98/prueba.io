@@ -1,98 +1,53 @@
-# 🐉 ZODIAC RACING 2D - GUÍA PARA ANDROID Y WINDOWS 🏁
+# 🐉 ZODIAC RACING - PISTA LARGA 10.000 KM (1ª PERSONA CENITAL) 🏁
 
-¡Tu juego **Zodiac Racing 2D** ya está 100% optimizado para ejecutarse en **Windows** y **Android**!
-
----
-
-## 🎮 1. CÓMO JUGAR EN WINDOWS (PC)
-
-Tienes 3 formas muy sencillas de jugarlo:
-
-### Opción A (Recomendada - Modo Aplicación de Escritorio):
-* Haz doble clic en el archivo **`JUGAR_WINDOWS.bat`**.
-* Se abrirá automáticamente en una ventana de aplicación dedicada e independiente (sin barras de navegador ni pestañas molestas).
-
-### Opción B (Directo en tu Navegador):
-* Haz doble clic directamente en **`index.html`** o **`Zodiac_Racing_2D_calendario_animales.html`**.
-
-### Opción C (Servidor Local con Conexión a Celular):
-* Haz doble clic en **`INICIAR_SERVIDOR_LOCAL.bat`** (o ejecuta `python server.py`).
-* Se abrirá en tu PC y te mostrará el Código QR para conectar tu celular.
+¡El juego ha sido actualizado con la **perspectiva en 1ª persona desde arriba**, una **pista larga de 10.000 km con 3 vueltas**, y la **imagen oficial de presentación** antes de que empiece la carrera!
 
 ---
 
-## 📱 2. CÓMO JUGAR EN ANDROID
+## 🌟 NOVEDADES PRINCIPALES
 
-### Método 1: Conexión Instantánea por Wi-Fi con Código QR (¡El más rápido!)
-1. Conecta tu celular Android a la **misma red Wi-Fi** que tu PC.
-2. En tu PC, haz doble clic en **`INICIAR_SERVIDOR_LOCAL.bat`** (o ejecuta `python server.py`).
-3. En la terminal de tu PC aparecerá un **Código QR**.
-4. Abre la app de **Cámara** en tu celular Android y apunta al código QR en la pantalla de la PC (o abre Chrome en tu celular y escribe la dirección IP que te muestra, por ejemplo: `http://192.168.100.66:8000`).
-5. ¡Listo! Ya estás jugando en Android con los controles táctiles en pantalla.
+1. **Pantalla de Presentación Oficial:**
+   * **Al abrir el juego:** Se muestra la imagen oficial en una pantalla de bienvenida con el botón **"⚡ ENTRAR AL JUEGO 🏁"**.
+   * **Antes de iniciar la carrera:** Al pulsar en comenzar, aparece un modal de presentación con la imagen oficial y la alineación de los 4 corredores (Tú vs Rivales/IAs) con el anuncio de la carrera.
 
----
+2. **Perspectiva en 1ª Persona Desde Arriba (Cenital Inmersiva):**
+   * Tu corredor se sitúa en la parte inferior mirando hacia adelante a la pista de alta velocidad.
+   * La carretera avanza vertiginosamente hacia abajo a velocidades de hasta 320–500 km/h.
+   * Los rivales (IAs y personas conectadas) aparecen delante, a los lados o detrás de ti en tiempo real.
 
-### Método 2: Instalarlo como App Nativa en Android (Funciona 100% Sin Internet)
-El juego cuenta con tecnología **PWA (Progressive Web App)** con Service Worker:
-1. Abre el juego en **Google Chrome** en tu Android (usando el Método 1).
-2. Toca el menú de los **3 puntos (⋮)** en la esquina superior derecha de Chrome.
-3. Elige la opción **"Instalar aplicación"** o **"Agregar a la pantalla principal"**.
-4. Se creará un icono con el dragón de Zodiac Racing en el cajón de aplicaciones de tu celular.
-5. Al abrirlo, se ejecuta a **pantalla completa**, sin barra de direcciones y **funciona incluso en modo avión (sin internet)**.
+3. **Pista Larga de 10.000 km con 3 Vueltas:**
+   * **Gran Premio de Resistencia:** 10.000 km en total divididos en **3 vueltas** (3.333 km por vuelta).
+   * **Odómetro digital y velocímetro:** Muestra los km recorridos (`0 / 10.000 km`) y la velocidad en km/h.
+   * **Minimapa de avance:** Barra superior con los 4 corredores avanzando a lo largo de los 10.000 km hacia la meta final.
 
----
-
-### Método 3: Generar un archivo instalador `.APK` (Opcional)
-Si deseas generar un archivo instalador `.apk` para compartir:
-* **Con PWABuilder (Sin programar):**
-  1. Si subes la carpeta a un hosting gratuito (como GitHub Pages o Netlify).
-  2. Ingresas en [pwabuilder.com](https://www.pwabuilder.com), colocas la URL y descargas el `.apk` listo para Android.
-* **Con Capacitor (En tu PC):**
-  Hemos dejado listos los archivos `package.json` y `capacitor.config.json`. En la terminal puedes ejecutar:
-  ```bash
-  npx @capacitor/cli add android
-  npx @capacitor/cli open android
-  ```
-  Y compilar el `.apk` desde Android Studio.
+4. **1 a 4 Jugadores (Local o en Servidor Elegido):**
+   * **Modo Local:** Corre tú solo o contra 1, 2 o 3 IAs inteligentes que esquivan rocas y charcos.
+   * **Modo Multijugador en Red:** Conéctate con amigos por WebSocket ingresando la dirección del servidor que elijas.
 
 ---
 
-## 🕹️ 3. CONTROLES DEL JUEGO
+## 🕹️ CONTROLES DEL JUEGO
 
-### En Windows (Teclado):
-* **W** o **Flecha Arriba (↑):** Acelerar (Gas).
-* **S** o **Flecha Abajo (↓):** Frenar / Marcha atrás.
-* **A** o **Flecha Izquierda (←):** Girar hacia el carril interior.
-* **D** o **Flecha Derecha (→):** Girar hacia el carril exterior.
-* **Barra Espaciadora (Espacio):** Activar Poder Especial.
+### En Windows (PC):
+* **A** o **Flecha Izquierda (←):** Girar hacia el carril izquierdo.
+* **D** o **Flecha Derecha (→):** Girar hacia el carril derecho.
+* **W** o **Flecha Arriba (↑):** Acelerar a fondo (Gas).
+* **S** o **Flecha Abajo (↓):** Frenar.
+* **Barra Espaciadora (Espacio):** Activar Poder Especial Zodiacal.
 
-### En Android (Controles Táctiles Multi-touch):
-Aparecen automáticamente en la parte inferior de la pantalla:
+### En Android (Botones Táctiles en Pantalla):
 * **Cluster Izquierdo:**
-  * Botón **◀ IZQ:** Cambia al carril interior.
-  * Botón **DER ▶:** Cambia al carril exterior.
+  * Botón **◀ IZQ:** Girar al carril izquierdo.
+  * Botón **DER ▶:** Girar al carril derecho.
 * **Centro:**
-  * Botón **🔮 PODER:** Pulsa para activar el turbo zodiacal (muestra el contador de poderes disponibles).
+  * Botón **🔮 PODER:** Activa el turbo elemental de tu signo.
 * **Cluster Derecho:**
-  * Botón **⚡ GAS:** Mantén presionado para acelerar a fondo.
-  * Botón **🛑 FRENO:** Mantén presionado para desacelerar o frenar.
-
-> **Multitáctil:** Puedes mantener presionado el botón **⚡ GAS** con el pulgar derecho mientras giras con los botones **◀ / ▶** con el pulgar izquierdo al mismo tiempo.
+  * Botón **⚡ GAS:** Acelerar a fondo.
+  * Botón **🛑 FRENO:** Frenar.
 
 ---
 
-## ✨ 4. NOVEDADES Y MEJORAS INCLUIDAS
+## 🚀 CÓMO INICIAR EL JUEGO
 
-1. **Físicas de Conducción Corregidas:**
-   * Ahora al acelerar el corredor avanza automáticamente a lo largo de la pista en el sentido de la carrera.
-   * El giro lateral permite navegar entre carriles para recoger los potenciadores.
-   * Si te sales de la pista hacia el césped, la fricción te frenará y soltará partículas de hierba.
-2. **Audio Sintetizado:**
-   * Efectos de sonido integrados para aceleración, recolectar nitros, recoger poderes, activación de turbo y fanfarria de victoria (sin necesidad de archivos MP3 externos).
-   * Botón para silenciar o activar sonido en cualquier momento.
-3. **Respuesta Háptica (Vibración):**
-   * En celulares Android, el dispositivo vibra al recoger poderes, al usar nitro y al ganar la carrera.
-4. **Pantalla Completa:**
-   * Botón `⛶ Pantalla Completa` para una inmersión total en celulares y laptops.
-5. **Generador de QR Integrado:**
-   * Botón `📲 Jugar en Android` en el juego para mostrar el código QR en la pantalla de la PC y escanearlo con el móvil.
+* **En Windows:** Haz doble clic en [**`JUGAR_WINDOWS.bat`**](file:///c:/Users/juani/OneDrive/Escritorio/pueba/JUGAR_WINDOWS.bat) para jugar en modo app o en [**`INICIAR_SERVIDOR_LOCAL.bat`**](file:///c:/Users/juani/OneDrive/Escritorio/pueba/INICIAR_SERVIDOR_LOCAL.bat) para multijugador y celular.
+* **En Android:** Inicia el servidor en la PC y escanea el código QR desde tu celular para jugar al instante por Wi-Fi.

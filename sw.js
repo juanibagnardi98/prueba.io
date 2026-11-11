@@ -1,5 +1,5 @@
 // Service Worker para soporte Offline completo en Android y Windows
-const CACHE_NAME = 'zodiac-racing-v1';
+const CACHE_NAME = 'zodiac-racing-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -7,7 +7,8 @@ const ASSETS_TO_CACHE = [
   './manifest.json',
   './icon.svg',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './portada.jpg'
 ];
 
 self.addEventListener('install', event => {
@@ -33,7 +34,6 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Ignorar peticiones API dinámicas como /api/
   if (event.request.url.includes('/api/')) {
     return;
   }

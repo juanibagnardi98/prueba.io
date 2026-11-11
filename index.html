@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#18263d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="description" content="Zodiac Racing 2D - Juego de carreras para Android y Windows">
-<title>🐉 Zodiac Racing 2D - Elemental Edition 🏁</title>
+<meta name="description" content="Zodiac Racing - Pista Larga 10.000 km en Primera Persona Desde Arriba">
+<title>🐉 Zodiac Racing - Pista Larga 10.000 km (1ª Persona Cenital) 🏁</title>
 
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -20,15 +20,15 @@
 }
 
 :root {
-    --bg-dark: #101827;
-    --panel-bg: #1c2c45;
-    --panel-sub: #263b59;
+    --bg-dark: #0a0f1d;
+    --panel-bg: #1e293b;
+    --panel-sub: #334155;
     --accent: #ffd166;
     --accent-hover: #ffb703;
-    --gas-color: #06d6a0;
-    --brake-color: #ef476f;
-    --power-color: #c77dff;
-    --boost-color: #00e5ff;
+    --primary: #3b82f6;
+    --success: #10b981;
+    --danger: #ef4444;
+    --purple: #a855f7;
 }
 
 body {
@@ -43,22 +43,147 @@ body {
     -webkit-user-select: none;
 }
 
-/* Barra superior de acciones */
+/* =====================================================================
+   PANTALLA DE PRESENTACIÓN / SPLASH INICIAL AL ABRIR
+   ===================================================================== */
+#splashScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #1e293b 0%, #060913 100%);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.splash-card {
+    max-width: 660px;
+    width: 95%;
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(8px);
+    border: 2px solid var(--accent);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.7), 0 0 25px rgba(255, 209, 102, 0.25);
+    animation: zoomIn 0.35s ease;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.splash-img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255, 209, 102, 0.3);
+}
+
+.splash-btn {
+    margin-top: 14px;
+    background: linear-gradient(135deg, #ffd166 0%, #f59e0b 100%);
+    color: #0f172a;
+    font-size: clamp(16px, 4.5vw, 20px);
+    font-weight: 900;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    animation: pulseBtn 1.4s infinite alternate;
+    letter-spacing: 1px;
+}
+
+@keyframes pulseBtn {
+    from { transform: scale(1); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
+    to { transform: scale(1.04); box-shadow: 0 8px 30px rgba(255, 209, 102, 0.7); }
+}
+
+/* =====================================================================
+   PRESENTACIÓN PRE-CARRERA (VERSUS / ANTES DE QUE INICIE)
+   ===================================================================== */
+#preRaceModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(8, 12, 24, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 14px;
+}
+
+.prerace-box {
+    max-width: 650px;
+    width: 95%;
+    text-align: center;
+}
+
+.prerace-banner {
+    width: 100%;
+    max-height: 230px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 2px solid var(--accent);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+}
+
+.prerace-title {
+    font-size: clamp(20px, 4.5vw, 28px);
+    color: var(--accent);
+    margin: 8px 0 2px 0;
+    font-weight: 900;
+}
+
+.prerace-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.prerace-card {
+    background: #1e293b;
+    border: 2px solid #38bdf8;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.prerace-card.me {
+    border-color: var(--accent);
+    background: #2b3a55;
+}
+
+/* BARRA SUPERIOR */
 .top-bar {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
-    background: #141f32;
-    padding: 8px 12px;
+    background: #111a2d;
+    padding: 6px 10px;
     border-bottom: 2px solid #263b59;
 }
 
 .top-btn {
-    background: #263b59;
-    color: #ffd166;
-    border: 1px solid #ffd166;
+    background: var(--panel-sub);
+    color: var(--accent);
+    border: 1px solid var(--accent);
     border-radius: 8px;
     padding: 6px 12px;
     font-size: 13px;
@@ -67,60 +192,79 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    transition: all 0.2s;
+    transition: all 0.15s;
 }
 
-.top-btn:hover {
-    background: #ffd166;
+.top-btn:hover, .top-btn.active {
+    background: var(--accent);
     color: #101827;
-}
-
-.top-btn.active {
-    background: #ffd166;
-    color: #101827;
-}
-
-header {
-    padding: 12px 10px;
-    background: #18263d;
-}
-
-h1 {
-    margin: 4px;
-    color: var(--accent);
-    font-size: clamp(22px, 5vw, 32px);
-    letter-spacing: 1px;
-}
-
-p.subtitle {
-    margin: 4px;
-    color: #94a3b8;
-    font-size: 14px;
 }
 
 .panel {
     background: var(--panel-bg);
-    padding: 18px;
-    margin: 15px auto;
+    padding: 16px;
+    margin: 12px auto;
     border-radius: 14px;
-    max-width: 680px;
-    width: 94%;
+    max-width: 720px;
+    width: 95%;
     box-shadow: 0 8px 24px rgba(0,0,0,0.35);
 }
 
-input, select, button {
+.menu-cover-container {
+    width: 100%;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+.menu-cover-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.mode-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tab-btn {
+    flex: 1;
+    max-width: 280px;
     padding: 10px 14px;
-    margin: 6px;
+    background: var(--panel-sub);
+    color: #cbd5e1;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    background: #1e3a8a;
+    color: #ffd166;
+    border-color: #ffd166;
+}
+
+input, select, button {
+    padding: 9px 12px;
+    margin: 4px;
     border-radius: 8px;
     border: none;
-    font-size: 15px;
+    font-size: 14px;
     font-family: inherit;
 }
 
 input, select {
     background: #0f172a;
     color: #fff;
-    border: 1px solid #334155;
+    border: 1px solid #475569;
 }
 
 input:focus, select:focus {
@@ -141,47 +285,155 @@ button.primary:hover {
     transform: translateY(-1px);
 }
 
-button.primary:active {
-    transform: translateY(1px);
+button.secondary {
+    background: var(--primary);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-#characterInfo {
-    margin-top: 15px;
-    padding: 12px;
+button.danger {
+    background: var(--danger);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: #0f172a;
+    border: 1px solid #475569;
+    margin: 6px 0;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #94a3b8;
+}
+
+.status-dot.online {
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+
+.status-dot.offline {
+    background: #ef4444;
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.slot-card {
     background: var(--panel-sub);
+    padding: 10px 6px;
     border-radius: 10px;
-    display: none;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ÁREA DE JUEGO */
-#gameArea {
-    display: none;
-    width: min(98vw, 920px);
-    margin: 8px auto;
+    border: 2px solid #475569;
     position: relative;
 }
 
-#hud {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 8px;
+.slot-card.occupied {
+    border-color: var(--accent);
+    background: #1e3a5f;
 }
 
-.hudItem {
-    background: var(--panel-sub);
-    padding: 8px 14px;
-    border-radius: 8px;
+.slot-card.is-ai {
+    border-color: var(--purple);
+    background: #2d1f47;
+}
+
+.slot-lane-badge {
+    position: absolute;
+    top: 5px;
+    left: 6px;
+    font-size: 10px;
     font-weight: bold;
-    font-size: 14px;
-    border: 1px solid rgba(255,209,102,0.2);
+    background: #0f172a;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #ffd166;
+}
+
+.slot-avatar {
+    font-size: 30px;
+    margin: 4px 0 2px 0;
+}
+
+.slot-name {
+    font-weight: bold;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.slot-meta {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* =====================================================================
+   ÁREA DE JUEGO EN 1ª PERSONA DESDE ARRIBA (CENITAL VERTICAL)
+   ===================================================================== */
+#gameArea {
+    display: none;
+    width: min(98vw, 760px);
+    margin: 4px auto;
+    position: relative;
+}
+
+/* HUD SUPERIOR DE VUELTAS Y 10.000 KM */
+#enduranceHeader {
+    background: #0f172a;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.endurance-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.progress-track {
+    position: relative;
+    width: 100%;
+    height: 22px;
+    background: #334155;
+    border-radius: 12px;
+    border: 1px solid #64748b;
+    overflow: visible;
+}
+
+.progress-runner {
+    position: absolute;
+    top: -6px;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    line-height: 32px;
+    text-align: center;
+    transform: translateX(-50%);
+    transition: left 0.05s linear;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+    z-index: 10;
 }
 
 .canvas-container {
@@ -190,38 +442,49 @@ button.primary:active {
     margin: 0 auto;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     border: 3px solid var(--accent);
 }
 
 canvas {
     width: 100%;
     height: auto;
-    background: #1e3a2b;
+    background: #111827;
     display: block;
     touch-action: none;
 }
 
+#hudInfo {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0;
+}
+
+.hudItem {
+    background: var(--panel-sub);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 13px;
+    border: 1px solid rgba(255,209,102,0.25);
+}
+
 #message {
     color: var(--accent);
-    min-height: 24px;
-    margin: 8px 0;
+    min-height: 22px;
+    margin: 4px 0;
     font-weight: bold;
-    font-size: clamp(14px, 3.5vw, 17px);
+    font-size: clamp(13px, 3.5vw, 16px);
 }
 
-.controls-guide {
-    margin: 6px;
-    color: #cbd5e1;
-    font-size: 13px;
-}
-
-/* CONTROLES TÁCTILES VIRTUALES (OPTIMIZADOS PARA ANDROID / CELULAR) */
+/* CONTROLES TÁCTILES VIRTUALES PARA ANDROID */
 #touchControls {
     display: none;
-    margin: 10px auto;
+    margin: 6px auto;
     width: 100%;
-    max-width: 820px;
+    max-width: 760px;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
@@ -231,13 +494,13 @@ canvas {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    padding: 4px;
+    gap: 8px;
+    padding: 2px;
 }
 
 .touch-cluster {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
 }
 
@@ -246,7 +509,7 @@ canvas {
     border: none;
     border-radius: 14px;
     font-weight: 900;
-    font-size: 16px;
+    font-size: 15px;
     color: white;
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0,0,0,0.4);
@@ -254,7 +517,7 @@ canvas {
     user-select: none;
     -webkit-user-select: none;
     transition: transform 0.08s, filter 0.08s;
-    min-height: 58px;
+    min-height: 56px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -269,26 +532,24 @@ canvas {
 .btn-steer {
     background: #2563eb;
     min-width: 68px;
-    font-size: 18px;
     border-bottom: 4px solid #1d4ed8;
 }
 
 .btn-gas {
     background: #059669;
-    min-width: 78px;
+    min-width: 76px;
     border-bottom: 4px solid #047857;
 }
 
 .btn-brake {
     background: #dc2626;
-    min-width: 66px;
-    font-size: 14px;
+    min-width: 64px;
     border-bottom: 4px solid #b91c1c;
 }
 
 .btn-power {
     background: #9333ea;
-    min-width: 74px;
+    min-width: 72px;
     border-bottom: 4px solid #7e22ce;
 }
 
@@ -311,7 +572,72 @@ canvas {
     margin-top: 2px;
 }
 
-/* MODAL DE CÓDIGO QR / ANDROID */
+/* PODIO / RESULTADOS */
+#resultsModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.results-box {
+    background: var(--panel-bg);
+    border: 3px solid var(--accent);
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+}
+
+.podium-list {
+    margin: 14px 0;
+    text-align: left;
+}
+
+.podium-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--panel-sub);
+    padding: 10px 14px;
+    margin: 6px 0;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.podium-item.first {
+    border: 2px solid #ffd166;
+    background: #3b2d15;
+}
+
+/* Calendario */
+#animalYears {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+    gap: 6px;
+    text-align: left;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 6px;
+    background: #0f172a;
+    border-radius: 8px;
+}
+
+.year-card {
+    background: var(--panel-sub);
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
 .modal-overlay {
     display: none;
     position: fixed;
@@ -327,213 +653,249 @@ canvas {
 }
 
 .modal-content {
-    background: #1c2c45;
-    border: 2px solid #ffd166;
+    background: var(--panel-bg);
+    border: 2px solid var(--accent);
     border-radius: 16px;
-    padding: 24px 20px;
+    padding: 22px;
     max-width: 480px;
     width: 90%;
-    text-align: center;
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-close {
-    position: absolute;
-    top: 10px;
-    right: 14px;
-    background: none;
-    border: none;
-    color: #ffd166;
-    font-size: 26px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.qr-box {
-    background: white;
-    padding: 12px;
-    border-radius: 12px;
-    display: inline-block;
-    margin: 14px auto;
-    max-width: 240px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-.qr-box img, .qr-box svg {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-.server-url-badge {
-    background: #0f172a;
-    border: 1px solid #ffd166;
-    color: #ffd166;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-family: monospace;
-    font-size: 15px;
-    font-weight: bold;
-    word-break: break-all;
-    margin: 10px 0;
-}
-
-.step-list {
-    text-align: left;
-    background: #263b59;
-    padding: 12px 18px;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-/* Calendario de animales */
-#animalYears {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
-    gap: 8px;
-    text-align: left;
-}
-
-.year-card {
-    background: var(--panel-sub);
-    padding: 8px;
-    border-radius: 7px;
-    font-size: 13px;
-}
-
-/* Adaptación para pantallas de celular en horizontal y vertical */
-@media (max-width: 600px) {
-    .touch-btn {
-        min-height: 52px;
-        padding: 6px;
-        font-size: 13px;
-    }
-    .btn-steer { min-width: 58px; font-size: 15px; }
-    .btn-gas { min-width: 66px; }
-    .btn-brake { min-width: 56px; }
-    .btn-power { min-width: 60px; }
-}
-
-@media (orientation: landscape) and (max-height: 500px) {
-    header, #animalCalendar {
-        display: none !important;
-    }
-    .top-bar {
-        padding: 4px;
-    }
-    #gameArea {
-        width: 98vw;
-        margin: 2px auto;
-    }
-    canvas {
-        max-height: 58vh;
-    }
-    .touch-btn {
-        min-height: 48px;
-    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- BARRA SUPERIOR DE ACCIONES -->
+<!-- =====================================================================
+     1. PANTALLA DE PRESENTACIÓN / SPLASH INICIAL CON LA IMAGEN
+     ===================================================================== -->
+<div id="splashScreen">
+    <div class="splash-card">
+        <img src="portada.jpg" alt="Zodiac Racing 3D Elemental Edition" class="splash-img">
+        <button class="splash-btn" onclick="dismissSplash()">
+            ⚡ ENTRAR AL JUEGO 🏁
+        </button>
+    </div>
+</div>
+
+<!-- =====================================================================
+     2. PRESENTACIÓN PREVIA A LA CARRERA (VERSUS / ANTES DE QUE INICIE)
+     ===================================================================== -->
+<div id="preRaceModal">
+    <div class="prerace-box">
+        <img src="portada.jpg" alt="Zodiac Racing Cover" class="prerace-banner">
+        <h2 class="prerace-title">🏁 ¡GRAN CARRERA DE 10.000 KM! 🏁</h2>
+        <p style="color:#cbd5e1; font-size:13px; margin:4px;">
+            1ª Persona Cenital · 3 Vueltas Épicas · Pista Larga de 4 Carriles
+        </p>
+
+        <div class="prerace-grid" id="preraceGrid"></div>
+
+        <button class="primary" onclick="skipPreRaceAndStart()" style="font-size:15px; padding:10px 24px; margin-top:8px;">
+            ¡VAMOS A LA PISTA! (3s)
+        </button>
+    </div>
+</div>
+
+<!-- BARRA SUPERIOR -->
 <div class="top-bar">
-    <button class="top-btn" id="btnQrModal" onclick="openQrModal()">
-        <span>📲</span> Jugar en Android (QR)
+    <button class="top-btn" onclick="openQrModal()">
+        <span>📲</span> Conectar Celular (QR)
     </button>
-    <button class="top-btn" id="btnFullscreen" onclick="toggleFullscreen()">
+    <button class="top-btn" onclick="toggleFullscreen()">
         <span>⛶</span> Pantalla Completa
     </button>
     <button class="top-btn" id="btnSound" onclick="toggleSound()">
         <span id="soundIcon">🔊</span> Sonido: ON
     </button>
     <button class="top-btn" id="btnToggleTouch" onclick="toggleTouchControls()">
-        <span>📱</span> Controles: Auto
+        <span>📱</span> Controles Táctiles
     </button>
 </div>
 
-<header>
-    <h1>🐉 ZODIAC RACING 2D 🏁</h1>
-    <p class="subtitle">Elemental Edition · Compatible con Windows y Android</p>
-</header>
-
-<!-- SECCIÓN CREAR CORREDOR -->
+<!-- MENÚ DE CONFIGURACIÓN Y LOBBY -->
 <section id="menu" class="panel">
-    <h2>Crear corredor zodiacal</h2>
-    <p>Introduce tu fecha de nacimiento para descubrir tu animal y clase elemental:</p>
 
-    <div>
-        <input type="number" id="day" placeholder="Día" min="1" max="31">
-        <input type="number" id="month" placeholder="Mes" min="1" max="12">
-        <input type="number" id="year" placeholder="Año" min="1945" max="2033">
-        <select id="gender">
-            <option value="masculino">Masculino</option>
-            <option value="femenino">Femenino</option>
-        </select>
+    <!-- PORTADA DE PRESENTACIÓN EN EL MENÚ -->
+    <div class="menu-cover-container">
+        <img src="portada.jpg" alt="Zodiac Racing 3D Elemental Edition" class="menu-cover-img">
     </div>
 
-    <button class="primary" onclick="createCharacter()" style="font-size:16px; margin-top:12px;">CREAR PERSONAJE</button>
+    <!-- PESTAÑAS: LOCAL VS ONLINE -->
+    <div class="mode-tabs">
+        <button class="tab-btn active" id="tabLocal" onclick="switchMode('local')">
+            🕹️ Modo Local / Contra IAs
+        </button>
+        <button class="tab-btn" id="tabOnline" onclick="switchMode('online')">
+            🌐 Servidor Multijugador (Salas)
+        </button>
+    </div>
 
-    <div id="characterInfo"></div>
+    <!-- CONFIGURAR CORREDOR ZODIACAL -->
+    <div style="background:#0f172a; padding:12px; border-radius:10px; margin-bottom:12px;">
+        <h3 style="margin:4px; color:var(--accent);">Tu Corredor Zodiacal</h3>
+        <p style="margin:4px; font-size:13px; color:#cbd5e1;">Fecha de nacimiento y nombre:</p>
+        <div>
+            <input type="text" id="playerName" placeholder="Tu Nombre" value="Piloto Zodiacal" maxlength="16">
+            <input type="number" id="day" placeholder="Día" min="1" max="31" value="15" style="width:65px;">
+            <input type="number" id="month" placeholder="Mes" min="1" max="12" value="8" style="width:65px;">
+            <input type="number" id="year" placeholder="Año" min="1945" max="2033" value="2000" style="width:85px;">
+            <select id="gender">
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+            </select>
+        </div>
+        <div id="characterPreview" style="margin-top:6px; font-size:14px; color:var(--accent);"></div>
+    </div>
+
+    <!-- MODO LOCAL -->
+    <div id="panelLocal">
+        <h3 style="margin:6px; color:#38bdf8;">Gran Premio de Resistencia (10.000 km · 3 Vueltas)</h3>
+        <p style="font-size:13px; color:#cbd5e1; margin:4px;">Configura los 4 corredores para la pista:</p>
+
+        <div style="margin:8px 0;">
+            <label style="font-weight:bold; margin-right:8px;">Total de Corredores:</label>
+            <select id="localTotalRacers" onchange="updateLocalSlotsPreview()">
+                <option value="4" selected>4 Corredores (Parrilla Completa: Tú + 3 IAs)</option>
+                <option value="3">3 Corredores (Tú + 2 IAs)</option>
+                <option value="2">2 Corredores (Mano a Mano: Tú + 1 IA)</option>
+                <option value="1">1 Corredor (Práctica / Contrarreloj en Solitario)</option>
+            </select>
+        </div>
+
+        <div class="slots-grid" id="localSlotsGrid"></div>
+
+        <button class="primary" onclick="showPreRaceAndStartLocal()" style="font-size:16px; padding:12px 24px; margin-top:8px;">
+            🏁 ¡COMENZAR CARRERA DE 10.000 KM!
+        </button>
+    </div>
+
+    <!-- MODO ONLINE (SERVIDOR CONFIGURABLE) -->
+    <div id="panelOnline" style="display:none;">
+        <h3 style="margin:6px; color:#a855f7;">Conexión a Servidor Elegido</h3>
+        <p style="font-size:13px; color:#cbd5e1; margin:4px;">
+            Introduce la dirección del servidor (o déjala por defecto para red local):
+        </p>
+
+        <div style="display:flex; justify-content:center; align-items:center; gap:6px; flex-wrap:wrap; margin:10px 0;">
+            <label style="font-weight:bold; font-size:13px;">Servidor WS:</label>
+            <input type="text" id="serverWsInput" placeholder="ws://192.168.100.66:8001" style="min-width:240px;">
+            <button class="secondary" onclick="connectToServer()">Conectar</button>
+        </div>
+
+        <div class="status-badge" id="serverStatusBadge">
+            <span class="status-dot" id="serverStatusDot"></span>
+            <span id="serverStatusText">No conectado al servidor</span>
+        </div>
+
+        <div id="roomActions" style="margin:14px 0;">
+            <button class="primary" onclick="createOnlineRoom()" style="font-size:15px; margin:5px;">
+                ➕ CREAR SALA NUEVA
+            </button>
+            <span style="margin:0 8px; color:#64748b;">o</span>
+            <input type="text" id="roomCodeInput" placeholder="CÓDIGO (Ej: AB12)" maxlength="4" style="text-transform:uppercase; width:130px; text-align:center; font-weight:bold;">
+            <button class="secondary" onclick="joinOnlineRoom()" style="font-size:15px; margin:5px;">
+                🚀 UNIRSE A SALA
+            </button>
+        </div>
+
+        <div id="roomLobby" style="display:none; background:#0f172a; padding:14px; border-radius:12px; margin-top:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+                <div>
+                    <span style="font-size:13px; color:#94a3b8;">CÓDIGO DE SALA:</span>
+                    <span id="displayRoomCode" style="font-size:22px; font-weight:900; color:var(--accent); margin-left:6px; letter-spacing:2px;"></span>
+                </div>
+                <button class="top-btn" onclick="copyRoomLink()">📋 Copiar Enlace</button>
+            </div>
+
+            <div class="slots-grid" id="onlineSlotsGrid"></div>
+
+            <div style="margin-top:14px;">
+                <button id="btnStartOnlineRace" class="primary" onclick="startOnlineRace()" style="display:none; font-size:16px; padding:12px 24px;">
+                    🏁 ¡INICIAR CARRERA!
+                </button>
+                <div id="waitHostMessage" style="display:none; color:#38bdf8; font-weight:bold;">
+                    ⏳ Esperando a que el Anfitrión inicie la carrera...
+                </div>
+                <button class="danger" onclick="leaveRoom()" style="margin-left:8px;">Salir de la Sala</button>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <!-- CALENDARIO DE ANIMALES CHINOS -->
-<section class="panel" id="animalCalendar">
-    <h2>🐉 Calendario de animales chinos (1945–2033)</h2>
-    <p>Consulta qué animal corresponde a cada año.</p>
+<section class="panel" id="calendarSection" style="max-height:200px; overflow:hidden;">
+    <h3 style="margin:4px; color:var(--accent); font-size:14px;">🐉 Calendario del Zodiaco Chino (1945–2033)</h3>
     <div id="animalYears"></div>
 </section>
 
-<!-- ÁREA DE JUEGO -->
+<!-- =====================================================================
+     ÁREA DE LA CARRERA EN PRIMERA PERSONA DESDE ARRIBA (10.000 KM)
+     ===================================================================== -->
 <section id="gameArea">
-    <div id="hud">
-        <div class="hudItem">🏁 Vuelta: <span id="lap" style="color:var(--accent);">1/3</span></div>
-        <div class="hudItem">⏱️ Tiempo: <span id="raceTimer">0.0s</span></div>
-        <div class="hudItem">⚡ Velocidad: <span id="speed">0</span>%</div>
-        <div class="hudItem">🔮 Poderes: <span id="powers">0</span></div>
-        <div class="hudItem">💊 Nitro: <span id="boosts">0</span></div>
+
+    <!-- HUD DE VUELTAS Y PROGRESO DE LOS 10.000 KM -->
+    <div id="enduranceHeader">
+        <div class="endurance-top">
+            <span style="color:var(--accent);">🏁 VUELTA: <span id="lapVal">1</span> / 3</span>
+            <span>🛣️ DISTANCIA: <span id="kmVal" style="color:#38bdf8;">0</span> / 10.000 km</span>
+            <span id="rankBadge" style="color:var(--accent);">1º / 4</span>
+        </div>
+        <div class="progress-track" id="progressTrack">
+            <!-- Marcadores de los 4 corredores avanzando a lo largo de los 10.000 km -->
+            <div id="progRunner0" class="progress-runner" style="left:0%;">🐉</div>
+            <div id="progRunner1" class="progress-runner" style="left:0%;">🐅</div>
+            <div id="progRunner2" class="progress-runner" style="left:0%;">🐎</div>
+            <div id="progRunner3" class="progress-runner" style="left:0%;">🐕</div>
+            <span style="position:absolute; right:4px; top:1px; font-size:16px;">🏁</span>
+        </div>
     </div>
 
+    <!-- CANVAS EN 1ª PERSONA CENITAL (LA PISTA SE DESPLAZA HACIA ADELANTE) -->
     <div class="canvas-container">
-        <canvas id="game" width="900" height="650"></canvas>
+        <canvas id="game" width="720" height="680"></canvas>
     </div>
 
-    <p id="message">¡Prepárate para correr!</p>
-
-    <div class="controls-guide">
-        <b>Teclado (PC):</b> W / ↑ Acelerar · S / ↓ Frenar · A / D / ← → Girar pista · ESPACIO Poder<br>
-        <b>Android / Celular:</b> Usa los botones en pantalla o toca los costados.
+    <!-- HUD VELOCÍMETRO Y PODERES -->
+    <div id="hudInfo">
+        <div class="hudItem">⚡ Velocidad: <span id="speedVal">0</span> km/h</div>
+        <div class="hudItem">🛣️ Carril: <span id="laneVal">2</span> / 4</div>
+        <div class="hudItem">🔮 Poderes: <span id="powerCount">1</span></div>
+        <div class="hudItem">⏱️ Tiempo: <span id="timerVal">0.0s</span></div>
     </div>
 
-    <!-- CONTROLES TÁCTILES EN PANTALLA (Para Android / Tablets / Pantallas Táctiles) -->
+    <p id="message">¡Semáforo en rojo! Conduce hacia adelante a fondo...</p>
+
+    <!-- GUÍA DE TECLAS (WINDOWS) -->
+    <div style="font-size:12px; color:#94a3b8; margin:4px;">
+        <b>Teclado PC:</b> A / ← Girar Izquierda · D / → Girar Derecha · W / ↑ Acelerar a Fondo · S / ↓ Frenar · ESPACIO Poder
+    </div>
+
+    <!-- CONTROLES TÁCTILES VIRTUALES (ANDROID) -->
     <div id="touchControls">
         <div class="touch-wrapper">
-            <!-- Grupo Izquierdo: Giro de carril -->
+            <!-- Izquierda: Girar Izquierda / Derecha -->
             <div class="touch-cluster">
-                <button id="btnLeft" class="touch-btn btn-steer" aria-label="Girar izquierda">
+                <button id="btnSteerLeft" class="touch-btn btn-steer" aria-label="Girar izquierda">
                     <span>◀</span>
                     <span style="font-size:10px;">IZQ</span>
                 </button>
-                <button id="btnRight" class="touch-btn btn-steer" aria-label="Girar derecha">
+                <button id="btnSteerRight" class="touch-btn btn-steer" aria-label="Girar derecha">
                     <span>▶</span>
                     <span style="font-size:10px;">DER</span>
                 </button>
             </div>
 
-            <!-- Centro: Botón de Poder Especial -->
+            <!-- Centro: Poder Zodiacal -->
             <div class="touch-cluster">
                 <button id="btnPower" class="touch-btn btn-power" aria-label="Usar poder">
                     <span>🔮</span>
                     <span style="font-size:11px;">PODER</span>
-                    <span id="powerBadge" class="badge-count">0</span>
+                    <span id="powerBadge" class="badge-count">1</span>
                 </button>
             </div>
 
-            <!-- Grupo Derecho: Acelerador y Freno -->
+            <!-- Derecha: Acelerar (Gas) y Frenar -->
             <div class="touch-cluster">
                 <button id="btnBrake" class="touch-btn btn-brake" aria-label="Frenar">
                     <span>🛑</span>
@@ -547,60 +909,64 @@ canvas {
         </div>
     </div>
 
-    <div style="margin-top:10px;">
-        <button class="primary" onclick="restartGame()">REINICIAR CARRERA</button>
-        <button class="top-btn" onclick="backToMenu()" style="margin-left:8px;">CAMBIAR PERSONAJE</button>
+    <div style="margin-top:8px;">
+        <button class="top-btn" onclick="exitRaceToMenu()">🚪 Salir al Menú</button>
     </div>
 </section>
 
-<!-- MODAL CÓDIGO QR PARA JUGAR EN ANDROID -->
+<!-- MODAL DE PODIO / RESULTADOS -->
+<div id="resultsModal">
+    <div class="results-box">
+        <h2 style="color:var(--accent); margin-top:0;">🏆 ¡CARRERA DE 10.000 KM COMPLETADA!</h2>
+        <p style="color:#94a3b8; font-size:14px;">3 vueltas completadas. Podio de honor:</p>
+        <div class="podium-list" id="podiumList"></div>
+        <button class="primary" onclick="closeResultsAndReset()" style="font-size:15px; margin-top:10px;">
+            Continuar
+        </button>
+    </div>
+</div>
+
+<!-- MODAL CÓDIGO QR -->
 <div id="qrModal" class="modal-overlay" onclick="closeQrModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeQrModal()">&times;</button>
         <h2 style="color:var(--accent); margin-top:0;">📲 Jugar en Android</h2>
-        <p style="font-size:14px; color:#cbd5e1;">Conecta tu celular a la misma red Wi-Fi y escanea el código con tu cámara:</p>
-
-        <div class="qr-box" id="qrContainer">
-            <img id="qrImage" src="/api/qr.svg" alt="Código QR de Zodiac Racing" onerror="showQrFallback()">
-            <div id="qrFallback" style="display:none; color:#111; padding:20px; font-weight:bold;">
-                Abre esta dirección en el navegador de tu celular:
-            </div>
+        <p style="font-size:13px; color:#cbd5e1;">Escanea con la cámara de tu celular en el mismo Wi-Fi:</p>
+        <div style="background:white; padding:10px; border-radius:10px; display:inline-block; margin:10px auto;">
+            <img id="qrImage" src="/api/qr.svg" alt="QR" style="display:block; max-width:200px; height:auto;">
         </div>
-
-        <div class="server-url-badge" id="serverUrlText">Cargando dirección...</div>
-
-        <div class="step-list">
-            <b>Cómo instalarlo como App en Android:</b><br>
-            1. Abre el enlace arriba en <b>Google Chrome</b> en tu celular.<br>
-            2. Toca los <b>3 puntos (⋮)</b> arriba a la derecha en Chrome.<br>
-            3. Pulsa <b>"Instalar aplicación"</b> o <b>"Agregar a la pantalla principal"</b>.<br>
-            4. ¡Listo! Quedará como un juego instalado que funciona incluso sin internet.
-        </div>
+        <div id="serverUrlText" style="font-family:monospace; color:var(--accent); background:#0f172a; padding:8px; border-radius:6px; margin:8px 0; word-break:break-all;"></div>
+        <button class="secondary" onclick="closeQrModal()">Cerrar</button>
     </div>
 </div>
 
 <script>
 /* =====================================================================
-   SISTEMA DE AUDIO SINTETIZADO (Web Audio API - 100% Offline y sin archivos)
+   CONTROL DE LA PANTALLA DE PRESENTACIÓN / SPLASH INICIAL
+   ===================================================================== */
+function dismissSplash() {
+    sounds.init();
+    const splash = document.getElementById("splashScreen");
+    splash.style.opacity = "0";
+    setTimeout(() => {
+        splash.style.display = "none";
+    }, 400);
+}
+
+/* =====================================================================
+   SISTEMA DE AUDIO PROCEDURAL (Web Audio API)
    ===================================================================== */
 class SoundEngine {
     constructor() {
         this.ctx = null;
         this.muted = false;
     }
-
     init() {
         if (!this.ctx) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (AudioContext) {
-                this.ctx = new AudioContext();
-            }
+            if (AudioContext) this.ctx = new AudioContext();
         }
-        if (this.ctx && this.ctx.state === "suspended") {
-            this.ctx.resume();
-        }
+        if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
     }
-
     playTone(freq, type = "sine", duration = 0.12, gainVal = 0.1) {
         if (this.muted || !this.ctx) return;
         try {
@@ -616,82 +982,47 @@ class SoundEngine {
             osc.stop(this.ctx.currentTime + duration);
         } catch(e) {}
     }
-
-    playBoost() {
+    playCountdownBeep(high = false) {
         this.init();
-        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
-            setTimeout(() => this.playTone(f, "triangle", 0.15, 0.12), i * 45);
-        });
+        this.playTone(high ? 880 : 440, high ? "triangle" : "sine", high ? 0.35 : 0.18, 0.2);
     }
-
-    playPowerPickup() {
+    playNitro() {
         this.init();
-        [440, 554.37, 659.25, 880].forEach((f, i) => {
-            setTimeout(() => this.playTone(f, "sine", 0.18, 0.15), i * 50);
-        });
+        [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => this.playTone(f, "triangle", 0.12, 0.12), i * 40));
     }
-
-    playUsePower() {
+    playPower() {
         this.init();
-        if (this.muted || !this.ctx) return;
-        try {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.type = "sawtooth";
-            osc.frequency.setValueAtTime(250, this.ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1100, this.ctx.currentTime + 0.35);
-            gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            osc.start();
-            osc.stop(this.ctx.currentTime + 0.35);
-        } catch(e) {}
+        [440, 554, 659, 880].forEach((f, i) => setTimeout(() => this.playTone(f, "sine", 0.15, 0.14), i * 45));
     }
-
     playLap() {
         this.init();
-        [587.33, 880, 1174.66].forEach((f, i) => {
-            setTimeout(() => this.playTone(f, "triangle", 0.22, 0.18), i * 75);
-        });
+        [587, 880, 1174].forEach((f, i) => setTimeout(() => this.playTone(f, "triangle", 0.22, 0.18), i * 70));
     }
-
+    playHit() {
+        this.init();
+        this.playTone(120, "sawtooth", 0.25, 0.25);
+    }
     playWin() {
         this.init();
-        const fanfare = [
-            {f: 523.25, d: 0.15}, {f: 659.25, d: 0.15}, {f: 783.99, d: 0.15},
-            {f: 1046.50, d: 0.35}, {f: 880, d: 0.2}, {f: 1046.50, d: 0.55}
-        ];
+        const fanfare = [{f:523, d:0.15}, {f:659, d:0.15}, {f:783, d:0.15}, {f:1046, d:0.4}];
         let delay = 0;
         fanfare.forEach(item => {
-            setTimeout(() => this.playTone(item.f, "triangle", item.d, 0.22), delay);
-            delay += item.d * 1000 + 40;
+            setTimeout(() => this.playTone(item.f, "triangle", item.d, 0.2), delay);
+            delay += item.d * 1000 + 30;
         });
     }
 }
-
 const sounds = new SoundEngine();
 
 function triggerHaptic(pattern) {
     if ("vibrate" in navigator) {
-        try {
-            navigator.vibrate(pattern);
-        } catch(e) {}
+        try { navigator.vibrate(pattern); } catch(e) {}
     }
 }
 
 /* =====================================================================
-   CONFIGURACIÓN DE LA PISTA Y ELEMENTOS DEL ZODIACO
+   ZODIACO OCCIDENTAL Y CHINO (1945-2033)
    ===================================================================== */
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-const animals = [
-    "Rata","Buey","Tigre","Conejo",
-    "Dragón","Serpiente","Caballo","Cabra",
-    "Mono","Gallo","Perro","Cerdo"
-];
-
 const westernSigns = [
     {name:"Aries", element:"Fuego", start:[3,21], end:[4,19]},
     {name:"Tauro", element:"Tierra", start:[4,20], end:[5,20]},
@@ -707,7 +1038,7 @@ const westernSigns = [
     {name:"Piscis", element:"Agua", start:[2,19], end:[3,20]}
 ];
 
-const classes = {
+const classesByElement = {
     Fuego: ["Guerrero","Guerrera"],
     Tierra: ["Mago","Maga"],
     Aire: ["Asesino","Asesina"],
@@ -720,35 +1051,16 @@ const animalEmojis = {
     Mono:"🐒", Gallo:"🐓", Perro:"🐕", Cerdo:"🐖"
 };
 
-let character = null;
-let player = null;
-let pickups = [];
-let particles = [];
-let keys = {};
-let gameRunning = false;
-let lastTime = 0;
-let lapProgress = 0;
-let totalPowers = 0;
-let totalBoosts = 0;
-let boostTimer = 0;
-let powerTimer = 0;
-let raceStartTime = 0;
-let raceElapsedTime = 0;
+const suppliedChineseOrder = [
+    "Gallo", "Perro", "Cerdo", "Rata", "Buey", "Tigre",
+    "Conejo", "Dragón", "Serpiente", "Caballo", "Cabra", "Mono"
+];
 
-const center = {x:450, y:325};
-const outerRadius = 265;
-const innerRadius = 155;
-const trackRadius = 210;
-
-/* =====================================================================
-   CÁLCULOS ZODIACALES Y CALENDARIO
-   ===================================================================== */
 function getWesternSign(day, month) {
     for (const sign of westernSigns) {
         const current = month * 100 + day;
         const start = sign.start[0] * 100 + sign.start[1];
         const end = sign.end[0] * 100 + sign.end[1];
-
         if (start <= end) {
             if (current >= start && current <= end) return sign;
         } else {
@@ -759,487 +1071,1091 @@ function getWesternSign(day, month) {
 }
 
 function getChineseAnimal(year) {
-    if (!Number.isInteger(year) || year < 1945 || year > 2033) {
-        return null;
-    }
-    const suppliedOrder = [
-        "Gallo", "Perro", "Cerdo", "Rata", "Buey", "Tigre",
-        "Conejo", "Dragón", "Serpiente", "Caballo", "Cabra", "Mono"
-    ];
-    return suppliedOrder[(year - 1945) % 12];
+    if (!Number.isInteger(year) || year < 1945 || year > 2033) return "Dragón";
+    return suppliedChineseOrder[(year - 1945) % 12];
 }
 
 function renderAnimalYears() {
     const calendar = document.getElementById("animalYears");
-    const suppliedOrder = [
-        "Gallo", "Perro", "Cerdo", "Rata", "Buey", "Tigre",
-        "Conejo", "Dragón", "Serpiente", "Caballo", "Cabra", "Mono"
-    ];
-
     calendar.innerHTML = "";
     for (let year = 1945; year <= 2033; year++) {
-        const animal = suppliedOrder[(year - 1945) % 12];
+        const animal = suppliedChineseOrder[(year - 1945) % 12];
         const item = document.createElement("div");
         item.className = "year-card";
         item.textContent = `${year}: ${animalEmojis[animal]} ${animal}`;
         calendar.appendChild(item);
     }
 }
-
 renderAnimalYears();
 
-function createCharacter() {
-    sounds.init();
-    const day = Number(document.getElementById("day").value);
-    const month = Number(document.getElementById("month").value);
-    const year = Number(document.getElementById("year").value);
+function getPlayerCharacter() {
+    const day = Number(document.getElementById("day").value) || 15;
+    const month = Number(document.getElementById("month").value) || 8;
+    const year = Number(document.getElementById("year").value) || 2000;
     const gender = document.getElementById("gender").value;
-
-    const date = new Date(year, month - 1, day);
-
-    if (
-        !day || !month || !year ||
-        year < 1945 || year > 2033 ||
-        month < 1 || month > 12 ||
-        date.getFullYear() !== year ||
-        date.getMonth() !== month - 1 ||
-        date.getDate() !== day
-    ) {
-        alert("Introduce una fecha válida entre 1945 y 2033.");
-        return;
-    }
+    const name = document.getElementById("playerName").value.trim() || "Piloto Zodiacal";
 
     const sign = getWesternSign(day, month);
     const animal = getChineseAnimal(year);
-    const className = classes[sign.element][gender === "femenino" ? 1 : 0];
+    const className = classesByElement[sign.element][gender === "femenino" ? 1 : 0];
 
-    character = {
+    return {
+        name,
         sign: sign.name,
         element: sign.element,
         animal,
         className,
         gender,
-        emoji: animalEmojis[animal]
+        emoji: animalEmojis[animal] || "🐉"
     };
-
-    const infoDiv = document.getElementById("characterInfo");
-    infoDiv.style.display = "block";
-    infoDiv.innerHTML = `
-        <h3 style="margin:4px; color:var(--accent);">¡Tu corredor está listo!</h3>
-        <p style="font-size:17px; margin:6px;">${character.emoji} Animal chino (${year}): <b>${animal}</b></p>
-        <p style="margin:4px;">Signo zodiacal: <b>${sign.name}</b> · Elemento: <b>${sign.element}</b></p>
-        <p style="margin:4px;">Clase de combate: <b>${className}</b></p>
-        <button class="primary" onclick="startGame()" style="font-size:16px; margin-top:10px;">COMENZAR CARRERA 🏁</button>
-    `;
 }
 
-function startGame() {
+function updateCharacterPreview() {
+    const char = getPlayerCharacter();
+    document.getElementById("characterPreview").innerHTML =
+        `<b>${char.emoji} ${char.animal}</b> · Signo: <b>${char.sign}</b> (${char.element}) · Clase: <b>${char.className}</b>`;
+}
+
+document.getElementById("day").addEventListener("input", updateCharacterPreview);
+document.getElementById("month").addEventListener("input", updateCharacterPreview);
+document.getElementById("year").addEventListener("input", updateCharacterPreview);
+document.getElementById("gender").addEventListener("change", updateCharacterPreview);
+document.getElementById("playerName").addEventListener("input", updateCharacterPreview);
+updateCharacterPreview();
+
+/* =====================================================================
+   GESTIÓN DE MODOS (LOCAL VS MULTIJUGADOR ONLINE)
+   ===================================================================== */
+let currentMode = "local";
+
+function switchMode(mode) {
+    currentMode = mode;
+    document.getElementById("tabLocal").classList.toggle("active", mode === "local");
+    document.getElementById("tabOnline").classList.toggle("active", mode === "online");
+    document.getElementById("panelLocal").style.display = mode === "local" ? "block" : "none";
+    document.getElementById("panelOnline").style.display = mode === "online" ? "block" : "none";
+}
+
+const aiAnimals = ["Tigre", "Dragón", "Caballo", "Perro", "Buey", "Mono", "Gallo", "Serpiente"];
+const aiElements = ["Fuego", "Tierra", "Aire", "Agua"];
+function generateAiCharacter(slot) {
+    const animal = aiAnimals[slot % aiAnimals.length];
+    const elem = aiElements[slot % aiElements.length];
+    return {
+        name: `Bot ${animal} IA`,
+        animal,
+        emoji: animalEmojis[animal] || "🤖",
+        sign: "Zodiaco IA",
+        element: elem,
+        className: classesByElement[elem][0]
+    };
+}
+
+function updateLocalSlotsPreview() {
+    const count = Number(document.getElementById("localTotalRacers").value);
+    const grid = document.getElementById("localSlotsGrid");
+    grid.innerHTML = "";
+    const userChar = getPlayerCharacter();
+
+    for (let slot = 0; slot < 4; slot++) {
+        const isUser = (slot === 0);
+        const isActive = slot < count;
+        const char = isUser ? userChar : generateAiCharacter(slot);
+
+        const card = document.createElement("div");
+        card.className = `slot-card ${isActive ? 'occupied' : ''} ${!isUser && isActive ? 'is-ai' : ''}`;
+        card.innerHTML = `
+            <div class="slot-lane-badge">Carril ${slot + 1}</div>
+            <div class="slot-avatar">${isActive ? char.emoji : '⚪'}</div>
+            <div class="slot-name">${isActive ? (isUser ? '👑 ' + char.name : char.name) : 'Vacío'}</div>
+            <div class="slot-meta">${isActive ? `${char.animal} · ${char.element}` : 'Sin corredor'}</div>
+        `;
+        grid.appendChild(card);
+    }
+}
+updateLocalSlotsPreview();
+
+/* =====================================================================
+   PRESENTACIÓN PREVIA A LA CARRERA (PRE-RACE MATCHUP)
+   ===================================================================== */
+let preRaceTimer = null;
+let pendingRaceStarter = null;
+
+function showPreRacePresentation(racers, onDone) {
     sounds.init();
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("animalCalendar").style.display = "none";
-    document.getElementById("gameArea").style.display = "block";
-    setupTouchControls();
-    restartGame();
+    const modal = document.getElementById("preRaceModal");
+    const grid = document.getElementById("preraceGrid");
+    grid.innerHTML = "";
+
+    racers.forEach((p, idx) => {
+        if (!p) return;
+        const card = document.createElement("div");
+        card.className = `prerace-card ${p.isHuman ? 'me' : ''}`;
+        card.innerHTML = `
+            <div style="font-size:11px; color:#ffd166; font-weight:bold;">Carril ${idx + 1}</div>
+            <div style="font-size:32px; margin:4px 0;">${p.character.emoji || '🐉'}</div>
+            <div style="font-weight:bold; font-size:13px;">${p.name}</div>
+            <div style="font-size:11px; color:#94a3b8;">${p.character.animal} (${p.character.element})</div>
+        `;
+        grid.appendChild(card);
+    });
+
+    modal.style.display = "flex";
+    pendingRaceStarter = onDone;
+
+    sounds.playPower();
+    triggerHaptic([60, 40, 80]);
+
+    if (preRaceTimer) clearTimeout(preRaceTimer);
+    preRaceTimer = setTimeout(() => {
+        skipPreRaceAndStart();
+    }, 2800);
 }
 
-function backToMenu() {
-    gameRunning = false;
-    document.getElementById("gameArea").style.display = "none";
-    document.getElementById("menu").style.display = "block";
-    document.getElementById("animalCalendar").style.display = "block";
+function skipPreRaceAndStart() {
+    if (preRaceTimer) {
+        clearTimeout(preRaceTimer);
+        preRaceTimer = null;
+    }
+    document.getElementById("preRaceModal").style.display = "none";
+    if (pendingRaceStarter) {
+        const fn = pendingRaceStarter;
+        pendingRaceStarter = null;
+        fn();
+    }
+}
+
+function showPreRaceAndStartLocal() {
+    const count = Number(document.getElementById("localTotalRacers").value);
+    const userChar = getPlayerCharacter();
+    myActiveSlot = 0;
+    isOnlineGame = false;
+
+    players = [];
+    for (let slot = 0; slot < count; slot++) {
+        const isUser = (slot === 0);
+        const char = isUser ? userChar : generateAiCharacter(slot);
+        players.push(createRacer(slot, char, isUser));
+    }
+
+    showPreRacePresentation(players, () => {
+        const randomSeed = Math.floor(Math.random() * 999999);
+        startRaceWithSeed(randomSeed, false);
+    });
 }
 
 /* =====================================================================
-   BUCLE DE JUEGO Y FÍSICAS DE CONDUCCIÓN REALISTAS
+   SISTEMA DE RED WEBSOCKET (MULTIJUGADOR EN SERVIDOR ELEGIDO)
    ===================================================================== */
-function restartGame() {
+let socket = null;
+let onlineRoom = null;
+let myOnlineSlot = 0;
+let isHost = false;
+
+function initServerUrl() {
+    fetch("/api/info")
+        .then(res => res.json())
+        .then(data => {
+            const input = document.getElementById("serverWsInput");
+            if (!input.value) {
+                input.value = data.ws_url || `ws://${window.location.hostname || 'localhost'}:8001`;
+            }
+            document.getElementById("serverUrlText").textContent = data.http_url;
+            connectToServer();
+        })
+        .catch(() => {
+            const input = document.getElementById("serverWsInput");
+            if (!input.value) {
+                input.value = `ws://${window.location.hostname || 'localhost'}:8001`;
+            }
+        });
+}
+initServerUrl();
+
+function updateConnectionStatus(connected, text) {
+    const dot = document.getElementById("serverStatusDot");
+    const label = document.getElementById("serverStatusText");
+    dot.className = "status-dot " + (connected ? "online" : "offline");
+    label.textContent = text;
+}
+
+function connectToServer() {
+    const wsUrl = document.getElementById("serverWsInput").value.trim();
+    if (!wsUrl) return;
+
+    if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+        socket.close();
+    }
+
+    updateConnectionStatus(false, "Conectando a " + wsUrl + "...");
+
+    try {
+        socket = new WebSocket(wsUrl);
+
+        socket.onopen = () => {
+            updateConnectionStatus(true, "🟢 Conectado al Servidor (" + wsUrl + ")");
+        };
+
+        socket.onclose = () => {
+            updateConnectionStatus(false, "🔴 Desconectado del Servidor");
+        };
+
+        socket.onerror = () => {
+            updateConnectionStatus(false, "❌ Error de conexión al servidor");
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                const msg = JSON.parse(event.data);
+                handleServerMessage(msg);
+            } catch(e) {}
+        };
+    } catch(err) {
+        updateConnectionStatus(false, "Error de URL de servidor");
+    }
+}
+
+function sendWs(data) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify(data));
+    }
+}
+
+function createOnlineRoom() {
     sounds.init();
-    player = {
-        angle: -Math.PI / 2,        // Inicia en la línea de meta
-        radius: trackRadius,        // Radio inicial: centro del asfalto
-        targetRadius: trackRadius,
-        speed: 0,
-        baseMaxSpeed: 175,
-        maxSpeed: 175,
-        color: "#ffd166"
-    };
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+        alert("Primero debes conectar con el servidor.");
+        return;
+    }
+    const char = getPlayerCharacter();
+    sendWs({
+        type: "create_room",
+        name: char.name,
+        character: char
+    });
+}
 
-    lapProgress = 0;
-    totalPowers = 0;
-    totalBoosts = 0;
-    boostTimer = 0;
-    powerTimer = 0;
-    particles = [];
+function joinOnlineRoom() {
+    sounds.init();
+    const code = document.getElementById("roomCodeInput").value.trim().toUpperCase();
+    if (!code) {
+        alert("Escribe el código de 4 letras de la sala.");
+        return;
+    }
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+        alert("Primero debes conectar con el servidor.");
+        return;
+    }
+    const char = getPlayerCharacter();
+    sendWs({
+        type: "join_room",
+        code,
+        name: char.name,
+        character: char
+    });
+}
+
+function handleServerMessage(msg) {
+    if (msg.type === "error") {
+        alert(msg.message || "Error en el servidor");
+        return;
+    }
+
+    if (msg.type === "room_joined") {
+        onlineRoom = msg.room;
+        myOnlineSlot = msg.slot;
+        isHost = msg.is_host;
+        showRoomLobby();
+        return;
+    }
+
+    if (msg.type === "room_updated") {
+        onlineRoom = msg.room;
+        renderOnlineLobbySlots();
+        return;
+    }
+
+    if (msg.type === "race_started") {
+        onlineRoom = msg.room;
+        const onlinePlayers = [];
+        onlineRoom.slots.forEach((s, idx) => {
+            if (s.occupied) {
+                const isMe = (idx === myOnlineSlot);
+                onlinePlayers.push(createRacer(idx, s.character, isMe, s.is_ai));
+            } else {
+                onlinePlayers.push(null);
+            }
+        });
+
+        showPreRacePresentation(onlinePlayers, () => {
+            startRaceWithSeed(msg.seed, true);
+        });
+        return;
+    }
+
+    if (msg.type === "player_moved") {
+        const slot = msg.slot;
+        if (slot !== undefined && players[slot] && slot !== myActiveSlot) {
+            players[slot].totalKm = msg.x;
+            players[slot].lane = msg.lane;
+            players[slot].targetLane = msg.lane;
+            players[slot].speed = msg.speed;
+            players[slot].powerTimer = msg.powerActive ? 3 : 0;
+            players[slot].nitroTimer = msg.nitroActive ? 3 : 0;
+        }
+        return;
+    }
+
+    if (msg.type === "player_finished") {
+        const slot = msg.slot;
+        if (players[slot]) {
+            players[slot].finished = true;
+            players[slot].finishTime = msg.time;
+        }
+        checkRaceCompletion();
+        return;
+    }
+}
+
+function showRoomLobby() {
+    document.getElementById("roomActions").style.display = "none";
+    document.getElementById("roomLobby").style.display = "block";
+    document.getElementById("displayRoomCode").textContent = onlineRoom.code;
+
+    const btnStart = document.getElementById("btnStartOnlineRace");
+    const waitMsg = document.getElementById("waitHostMessage");
+
+    if (isHost) {
+        btnStart.style.display = "inline-block";
+        waitMsg.style.display = "none";
+    } else {
+        btnStart.style.display = "none";
+        waitMsg.style.display = "block";
+    }
+
+    renderOnlineLobbySlots();
+}
+
+function renderOnlineLobbySlots() {
+    const grid = document.getElementById("onlineSlotsGrid");
+    grid.innerHTML = "";
+
+    onlineRoom.slots.forEach((s, idx) => {
+        const card = document.createElement("div");
+        card.className = `slot-card ${s.occupied ? 'occupied' : ''} ${s.is_ai ? 'is-ai' : ''}`;
+
+        let actionHtml = "";
+        if (isHost && idx !== 0) {
+            if (!s.occupied) {
+                actionHtml = `<button class="secondary" style="font-size:11px; padding:3px 8px; margin-top:5px;" onclick="toggleAiSlot(${idx}, true)">+ Rellenar con IA</button>`;
+            } else if (s.is_ai) {
+                actionHtml = `<button class="danger" style="font-size:11px; padding:3px 8px; margin-top:5px;" onclick="toggleAiSlot(${idx}, false)">Quitar IA</button>`;
+            }
+        }
+
+        card.innerHTML = `
+            <div class="slot-lane-badge">Carril ${idx + 1}</div>
+            <div class="slot-avatar">${s.occupied ? (s.character.emoji || '👤') : '⚪'}</div>
+            <div class="slot-name">${s.occupied ? s.name : 'Libre'}</div>
+            <div class="slot-meta">${s.occupied ? `${s.character.animal || ''} (${s.character.element || ''})` : 'Esperando...'}</div>
+            ${actionHtml}
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function toggleAiSlot(slotIdx, enable) {
+    const aiChar = generateAiCharacter(slotIdx);
+    sendWs({
+        type: "set_slot_ai",
+        slot: slotIdx,
+        enable,
+        ai_info: {
+            name: aiChar.name,
+            character: aiChar
+        }
+    });
+}
+
+function startOnlineRace() {
+    if (!isHost) return;
+    sendWs({ type: "start_race" });
+}
+
+function leaveRoom() {
+    if (socket) socket.close();
+    onlineRoom = null;
+    document.getElementById("roomLobby").style.display = "none";
+    document.getElementById("roomActions").style.display = "block";
+    connectToServer();
+}
+
+function copyRoomLink() {
+    if (!onlineRoom) return;
+    const url = window.location.origin + window.location.pathname + `?room=${onlineRoom.code}`;
+    navigator.clipboard.writeText(url).then(() => alert("¡Enlace copiado al portapapeles!"));
+}
+
+/* =====================================================================
+   MOTOR EN 1ª PERSONA CENITAL (PISTA LARGA DE 10.000 KM - 3 VUELTAS)
+   ===================================================================== */
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+// Constantes de la Gran Carrera
+const TOTAL_RACE_KM = 10000;          // 10.000 km de carrera total
+const TOTAL_LAPS = 3;                 // 3 Vueltas
+const KM_PER_LAP = TOTAL_RACE_KM / TOTAL_LAPS; // 3333.33 km por vuelta
+
+// Parámetros de la pista recta cenital
+const NUM_LANES = 4;
+const ROAD_WIDTH = 480;               // Ancho total de la carretera en px
+const ROAD_LEFT = (720 - ROAD_WIDTH) / 2; // 120px margen izq
+const LANE_WIDTH = ROAD_WIDTH / NUM_LANES; // 120px por carril
+const PLAYER_SCREEN_Y = 510;          // Posición fija del jugador en 1ª persona (hacia abajo mirando hacia adelante)
+
+let gameRunning = false;
+let raceStartTime = 0;
+let raceState = "idle";
+let countdownTimer = 0;
+let lastTimestamp = 0;
+let trackOffset = 0;                  // Desplazamiento visual de la carretera
+
+let players = [];
+let pickups = [];
+let obstacles = [];
+let particles = [];
+let myActiveSlot = 0;
+let isOnlineGame = false;
+let keys = {};
+
+function seededRandom(seed) {
+    let x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
+
+function generateTrackElements(seed) {
     pickups = [];
-    raceStartTime = performance.now();
-    raceElapsedTime = 0;
+    obstacles = [];
+    let s = seed;
 
-    createPickups();
+    // Generar pickups y obstáculos a lo largo de la pista larga
+    for (let d = 200; d < TOTAL_RACE_KM - 200; d += 85) {
+        s += 1;
+        const lane = Math.floor(seededRandom(s) * NUM_LANES);
+        const typeRoll = seededRandom(s + 55);
 
+        if (typeRoll < 0.32) {
+            pickups.push({ km: d, lane, type: "nitro", collected: false });
+        } else if (typeRoll < 0.58) {
+            pickups.push({ km: d, lane, type: "power", collected: false });
+        } else if (typeRoll < 0.80) {
+            obstacles.push({ km: d, lane, type: "rock" });
+        } else if (typeRoll < 0.95) {
+            obstacles.push({ km: d, lane, type: "oil" });
+        }
+    }
+}
+
+function startRaceWithSeed(seed, isOnline) {
+    sounds.init();
+    isOnlineGame = isOnline;
+
+    if (isOnline && onlineRoom) {
+        players = [];
+        onlineRoom.slots.forEach((s, idx) => {
+            if (s.occupied) {
+                const isMe = (idx === myOnlineSlot);
+                players.push(createRacer(idx, s.character, isMe, s.is_ai));
+            } else {
+                players.push(null);
+            }
+        });
+        myActiveSlot = myOnlineSlot;
+    }
+
+    generateTrackElements(seed);
+    particles = [];
+    trackOffset = 0;
+
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("calendarSection").style.display = "none";
+    document.getElementById("gameArea").style.display = "block";
+
+    setupTouchControls();
+
+    raceState = "countdown";
+    countdownTimer = 3.5;
     gameRunning = true;
-    lastTime = performance.now();
+    lastTimestamp = performance.now();
 
-    document.getElementById("message").textContent = "¡Acelera para cruzar la meta!";
-    updateHUD();
+    sounds.playCountdownBeep(false);
     requestAnimationFrame(gameLoop);
 }
 
-function createPickups() {
-    pickups = [];
-    // 18 recolectables distribuidos en los 3 carriles de la pista
-    const laneOffsets = [-24, 0, 24]; // Interior, Centro, Exterior
-    for (let i = 0; i < 18; i++) {
-        const angle = (Math.PI * 2 * i) / 18 + 0.15;
-        const laneRadius = trackRadius + laneOffsets[i % 3];
-        pickups.push({
-            angle,
-            radius: laneRadius,
-            type: i % 3 === 0 ? "boost" : "power",
-            collected: false
-        });
-    }
-}
-
-function updateHUD() {
-    const currentLap = Math.min(3, Math.floor(lapProgress / (Math.PI * 2)) + 1);
-    document.getElementById("lap").textContent = currentLap + "/3";
-
-    const speedPct = Math.round((player.speed / player.maxSpeed) * 100);
-    document.getElementById("speed").textContent = speedPct;
-
-    document.getElementById("powers").textContent = totalPowers;
-    document.getElementById("boosts").textContent = totalBoosts;
-
-    // Actualizar badge del botón táctil de poder
-    const badge = document.getElementById("powerBadge");
-    if (badge) {
-        badge.textContent = totalPowers;
-    }
-    const btnPower = document.getElementById("btnPower");
-    if (btnPower) {
-        if (totalPowers > 0) {
-            btnPower.classList.add("ready");
-        } else {
-            btnPower.classList.remove("ready");
-        }
-    }
-
-    if (gameRunning) {
-        raceElapsedTime = ((performance.now() - raceStartTime) / 1000).toFixed(1);
-        document.getElementById("raceTimer").textContent = raceElapsedTime + "s";
-    }
+function createRacer(lane, char, isHuman, isAi = false) {
+    return {
+        slot: lane,
+        name: char.name || `Corredor ${lane + 1}`,
+        character: char,
+        isHuman,
+        isAi: isAi || (!isHuman && !isOnlineGame),
+        totalKm: 0,             // Kilómetros totales recorridos (0 a 10.000 km)
+        currentLap: 1,          // Vuelta actual (1, 2, 3)
+        lane: lane,             // Carril actual (0 a 3)
+        targetLane: lane,       // Carril destino para lerp suave
+        laneProgress: 1,        // Interpolación lateral suave
+        speed: 0,               // Velocidad en km/h
+        baseMaxSpeed: 320,      // Velocidad punta base (320 km/h)
+        maxSpeed: 320,
+        nitroTimer: 0,
+        powerTimer: 0,
+        powerCount: 1,
+        finished: false,
+        finishTime: 0,
+        aiThinkTimer: 0,
+        tilt: 0                 // Inclinación al girar para efecto visual
+    };
 }
 
 function update(delta) {
     if (!gameRunning) return;
 
-    // Aceleración y frenado
+    if (raceState === "countdown") {
+        countdownTimer -= delta;
+        const countInt = Math.ceil(countdownTimer);
+
+        if (countInt > 0) {
+            document.getElementById("message").textContent = `🚦 ¡SEMÁFORO EN ROJO! ${countInt}...`;
+        } else {
+            raceState = "racing";
+            raceStartTime = performance.now();
+            sounds.playCountdownBeep(true);
+            triggerHaptic([60, 40, 60]);
+            document.getElementById("message").textContent = "🏁 ¡¡ACELERA A FONDO!!";
+        }
+        return;
+    }
+
+    if (raceState === "racing") {
+        const currentTime = (performance.now() - raceStartTime) / 1000;
+        document.getElementById("timerVal").textContent = currentTime.toFixed(1) + "s";
+
+        // Jugador local
+        const me = players[myActiveSlot];
+        if (me && !me.finished) {
+            handleLocalPlayerInput(me, delta);
+        }
+
+        // IAs
+        const canSimulateAi = !isOnlineGame || (isOnlineGame && isHost);
+        players.forEach(p => {
+            if (p && p.isAi && !p.finished && canSimulateAi) {
+                simulateAiRacer(p, delta);
+            }
+        });
+
+        // Físicas generales de los corredores
+        players.forEach(p => {
+            if (!p || p.finished) return;
+
+            // Interpolación de carril lateral suave
+            if (p.lane !== p.targetLane) {
+                p.laneProgress += delta * 5.5;
+                p.tilt = (p.targetLane > p.lane) ? 0.2 : -0.2;
+                if (p.laneProgress >= 1) {
+                    p.lane = p.targetLane;
+                    p.laneProgress = 1;
+                    p.tilt = 0;
+                }
+            } else {
+                p.tilt = 0;
+            }
+
+            // Avance kilométrico a alta velocidad (escala para carrera de 10.000 km)
+            const kmPerSec = p.speed * 0.28; // Factor de avance acelerado
+            p.totalKm += kmPerSec * delta;
+
+            // Cálculo de vueltas (10.000 km en 3 vueltas)
+            const prevLap = p.currentLap;
+            p.currentLap = Math.min(3, Math.floor(p.totalKm / KM_PER_LAP) + 1);
+
+            if (p.currentLap > prevLap && p.currentLap <= 3) {
+                if (p.isHuman) {
+                    sounds.playLap();
+                    triggerHaptic([80, 40, 80]);
+                    document.getElementById("message").textContent = `🏁 ¡Comienza la Vuelta ${p.currentLap}/3!`;
+                }
+            }
+
+            // Timers de turbo y poder
+            if (p.nitroTimer > 0) {
+                p.nitroTimer -= delta;
+                if (p.nitroTimer <= 0) p.maxSpeed = p.baseMaxSpeed;
+            }
+
+            if (p.powerTimer > 0) {
+                p.powerTimer -= delta;
+                if (p.powerTimer <= 0) p.maxSpeed = p.baseMaxSpeed;
+            }
+
+            // Cruce de meta final de los 10.000 km
+            if (p.totalKm >= TOTAL_RACE_KM) {
+                p.totalKm = TOTAL_RACE_KM;
+                p.finished = true;
+                p.finishTime = currentTime;
+
+                if (p.isHuman) {
+                    sounds.playWin();
+                    triggerHaptic([100, 50, 100, 50, 200]);
+                }
+
+                if (isOnlineGame && p.slot === myActiveSlot) {
+                    sendWs({
+                        type: "player_finish",
+                        slot: p.slot,
+                        time: p.finishTime
+                    });
+                }
+
+                checkRaceCompletion();
+            }
+        });
+
+        // Colisiones con pickups y obstáculos para el jugador local
+        if (me && !me.finished) {
+            checkLocalCollisions(me);
+            // La pista se desplaza según la velocidad del jugador
+            trackOffset += (me.speed * 3.8) * delta;
+        }
+
+        // Transmisión WebSocket multijugador
+        if (isOnlineGame && me && !me.finished) {
+            sendWs({
+                type: "race_update",
+                x: me.totalKm,
+                lane: me.targetLane,
+                speed: me.speed,
+                powerActive: me.powerTimer > 0,
+                nitroActive: me.nitroTimer > 0
+            });
+
+            if (isHost) {
+                players.forEach(p => {
+                    if (p && p.isAi && !p.finished) {
+                        sendWs({
+                            type: "ai_update",
+                            slot: p.slot,
+                            x: p.totalKm,
+                            lane: p.targetLane,
+                            speed: p.speed,
+                            powerActive: p.powerTimer > 0,
+                            nitroActive: p.nitroTimer > 0
+                        });
+                    }
+                });
+            }
+        }
+
+        updateHUD();
+    }
+
+    // Partículas
+    for (let i = particles.length - 1; i >= 0; i--) {
+        const pt = particles[i];
+        pt.y += pt.vy * delta;
+        pt.life -= delta;
+        pt.size *= 0.94;
+        if (pt.life <= 0) particles.splice(i, 1);
+    }
+}
+
+function handleLocalPlayerInput(player, delta) {
     const isGas = keys["w"] || keys["ArrowUp"] || keys["gas"];
     const isBrake = keys["s"] || keys["ArrowDown"] || keys["brake"];
-    const isLeft = keys["a"] || keys["ArrowLeft"] || keys["left"];
-    const isRight = keys["d"] || keys["ArrowRight"] || keys["right"];
 
     if (isGas) {
         player.speed += 140 * delta;
-        // Partículas de humo al acelerar
+        // Partículas de escape hacia atrás
         if (Math.random() < 0.4) {
-            spawnParticle(player.angle, player.radius, "#ffffff", 14, 0.4);
+            spawnExhaustParticle(player);
         }
     } else {
-        // Fricción natural cuando no se acelera
-        player.speed -= 40 * delta;
+        player.speed -= 45 * delta;
     }
 
     if (isBrake) {
-        player.speed -= 160 * delta;
+        player.speed -= 220 * delta;
     }
 
-    // Comprobar si está en el pasto (fuera de pista)
-    const onGrass = player.radius < innerRadius + 12 || player.radius > outerRadius - 12;
-    if (onGrass) {
-        // La hierba frena el coche
-        player.speed = Math.min(player.speed, 65);
-        if (Math.random() < 0.35) {
-            spawnParticle(player.angle, player.radius, "#38b000", 12, 0.3);
-            triggerHaptic(15);
-        }
-    }
-
-    // Delimitar velocidad
     player.speed = Math.max(0, Math.min(player.maxSpeed, player.speed));
+}
 
-    // Giro de carril (izq = hacia adentro, der = hacia afuera)
-    if (isLeft) {
-        player.radius -= 90 * delta;
+function steerLane(direction) {
+    sounds.init();
+    const me = players[myActiveSlot];
+    if (!me || me.finished || raceState !== "racing") return;
+
+    if (direction === "left" && me.targetLane > 0) {
+        me.targetLane--;
+        me.laneProgress = 0;
+    } else if (direction === "right" && me.targetLane < NUM_LANES - 1) {
+        me.targetLane++;
+        me.laneProgress = 0;
     }
-    if (isRight) {
-        player.radius += 90 * delta;
-    }
+}
 
-    // Limitar dentro de los límites visuales
-    player.radius = Math.max(innerRadius - 8, Math.min(outerRadius + 8, player.radius));
+function useSpecialPower() {
+    sounds.init();
+    const me = players[myActiveSlot];
+    if (!me || me.finished || raceState !== "racing" || me.powerCount <= 0) return;
 
-    // Avance angular alrededor de la pista (física de arco circular)
-    const angularSpeed = player.speed / player.radius;
-    player.angle += angularSpeed * delta;
+    me.powerCount--;
+    me.powerTimer = 5;
+    me.maxSpeed = me.baseMaxSpeed * 1.5;
+    me.speed = me.maxSpeed;
 
-    // Progreso de vuelta
-    const previousLap = Math.floor(lapProgress / (Math.PI * 2));
-    lapProgress += (player.speed / trackRadius) * delta;
-    const currentLap = Math.floor(lapProgress / (Math.PI * 2));
+    sounds.playPower();
+    triggerHaptic([60, 40, 90]);
 
-    if (currentLap > previousLap) {
-        if (currentLap >= 3) {
-            finishGame();
-            return;
-        }
-
-        sounds.playLap();
-        triggerHaptic([80, 40, 80]);
-        // Reaparecen los poderes para la siguiente vuelta
-        pickups.forEach(item => item.collected = false);
-        document.getElementById("message").textContent = `🏁 ¡Vuelta ${currentLap + 1}/3 completada!`;
-    }
-
-    collectPickups();
-
-    // Temporizadores de boost y poder
-    if (boostTimer > 0) {
-        boostTimer -= delta;
-        // Estela azul brillante
-        spawnParticle(player.angle, player.radius, "#00e5ff", 18, 0.5);
-        if (boostTimer <= 0) {
-            player.maxSpeed = player.baseMaxSpeed;
-            document.getElementById("message").textContent = "Nitro agotado.";
-        }
-    }
-
-    if (powerTimer > 0) {
-        powerTimer -= delta;
-        // Estela mágica dorada/morada
-        spawnParticle(player.angle, player.radius, "#e879f9", 20, 0.6);
-        if (powerTimer <= 0) {
-            player.maxSpeed = player.baseMaxSpeed;
-        }
-    }
-
-    // Actualizar partículas
-    for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.life -= delta;
-        p.size *= 0.95;
-        if (p.life <= 0) {
-            particles.splice(i, 1);
-        }
-    }
-
+    const elem = me.character.element || "Fuego";
+    document.getElementById("message").textContent = `✨ ¡PODER ZODIACAL DE ${elem.toUpperCase()} ACTIVADO!`;
     updateHUD();
 }
 
-function spawnParticle(angle, radius, color, size, life) {
-    const x = center.x + Math.cos(angle) * radius;
-    const y = center.y + Math.sin(angle) * radius;
+function simulateAiRacer(ai, delta) {
+    ai.speed += 110 * delta;
+    ai.speed = Math.max(0, Math.min(ai.maxSpeed, ai.speed));
+
+    ai.aiThinkTimer -= delta;
+    if (ai.aiThinkTimer <= 0) {
+        ai.aiThinkTimer = 0.35 + Math.random() * 0.4;
+
+        // Esquivar obstáculos por delante
+        const obstacleAhead = obstacles.find(o =>
+            o.lane === ai.targetLane && o.km > ai.totalKm && o.km < ai.totalKm + 180
+        );
+
+        if (obstacleAhead) {
+            if (ai.targetLane === 0) ai.targetLane = 1;
+            else if (ai.targetLane === NUM_LANES - 1) ai.targetLane = NUM_LANES - 2;
+            else ai.targetLane += (Math.random() < 0.5 ? 1 : -1);
+            ai.laneProgress = 0;
+        } else {
+            // Buscar si hay nitro o poder cerca
+            const pickupNearby = pickups.find(p =>
+                !p.collected && Math.abs(p.lane - ai.targetLane) === 1 && p.km > ai.totalKm && p.km < ai.totalKm + 120
+            );
+            if (pickupNearby && Math.random() < 0.65) {
+                ai.targetLane = pickupNearby.lane;
+                ai.laneProgress = 0;
+            }
+        }
+
+        // Usar poder si está disponible
+        if (ai.powerCount > 0 && ai.speed > 240 && Math.random() < 0.25) {
+            ai.powerCount--;
+            ai.powerTimer = 4.5;
+            ai.maxSpeed = ai.baseMaxSpeed * 1.4;
+            ai.speed = ai.maxSpeed;
+        }
+    }
+}
+
+function checkLocalCollisions(me) {
+    // Pickups (Nitros y Poderes)
+    pickups.forEach(item => {
+        if (item.collected) return;
+        if (item.lane === me.targetLane && Math.abs(item.km - me.totalKm) < 25) {
+            item.collected = true;
+
+            if (item.type === "nitro") {
+                me.nitroTimer = 4.5;
+                me.maxSpeed = me.baseMaxSpeed * 1.35;
+                me.speed = me.maxSpeed;
+                sounds.playNitro();
+                triggerHaptic(45);
+                document.getElementById("message").textContent = "⚡ ¡NITRO RECOGIDO! +35% de aceleración";
+            } else {
+                me.powerCount++;
+                sounds.playPower();
+                triggerHaptic(50);
+                document.getElementById("message").textContent = "🔮 ¡PODER ZODIACAL RECARGADO! Pulsa PODER";
+            }
+        }
+    });
+
+    // Obstáculos (Rocas y Charcos) - Inmune si tiene poder activo
+    if (me.powerTimer <= 0) {
+        obstacles.forEach(obs => {
+            if (obs.lane === me.targetLane && Math.abs(obs.km - me.totalKm) < 20) {
+                me.speed = Math.max(60, me.speed * 0.45);
+                sounds.playHit();
+                triggerHaptic([80, 50, 80]);
+                document.getElementById("message").textContent =
+                    obs.type === "rock" ? "💥 ¡Chocaste una roca! Velocidad reducida" : "💧 ¡Derrapaste en un charco!";
+            }
+        });
+    }
+}
+
+function getRacerScreenX(player) {
+    const startX = ROAD_LEFT + player.lane * LANE_WIDTH + LANE_WIDTH / 2;
+    const targetX = ROAD_LEFT + player.targetLane * LANE_WIDTH + LANE_WIDTH / 2;
+    return startX + (targetX - startX) * player.laneProgress;
+}
+
+function spawnExhaustParticle(player) {
+    const x = getRacerScreenX(player) + (Math.random() - 0.5) * 12;
+    const y = PLAYER_SCREEN_Y + 22;
+    const color = player.powerTimer > 0 ? "#e879f9" : player.nitroTimer > 0 ? "#00e5ff" : "#cbd5e1";
     particles.push({
-        x: x + (Math.random() - 0.5) * 8,
-        y: y + (Math.random() - 0.5) * 8,
-        color,
-        size,
-        life,
-        maxLife: life
+        x, y, vy: 140 + Math.random() * 80,
+        color, size: 10, life: 0.35, maxLife: 0.35
     });
 }
 
-function collectPickups() {
-    const px = center.x + Math.cos(player.angle) * player.radius;
-    const py = center.y + Math.sin(player.angle) * player.radius;
+/* =====================================================================
+   DIBUJO EN PRIMERA PERSONA DESDE ARRIBA (CENITAL INMERSIVA)
+   ===================================================================== */
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    const me = players[myActiveSlot] || { totalKm: 0, speed: 0 };
+
+    // 1. Césped lateral
+    ctx.fillStyle = "#1e3a2b";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 2. Carretera de asfalto centrada
+    ctx.fillStyle = "#2d3748";
+    ctx.fillRect(ROAD_LEFT, 0, ROAD_WIDTH, canvas.height);
+
+    // 3. Pianos de carrera rojo y blanco en los bordes
+    drawVerticalCurb(ROAD_LEFT - 12, trackOffset);
+    drawVerticalCurb(ROAD_LEFT + ROAD_WIDTH, trackOffset);
+
+    // 4. Líneas divisorias de carril discontinuas que se desplazan hacia abajo
+    ctx.strokeStyle = "#f8fafc";
+    ctx.lineWidth = 4;
+    for (let l = 1; l < NUM_LANES; l++) {
+        const x = ROAD_LEFT + l * LANE_WIDTH;
+        ctx.beginPath();
+        ctx.setLineDash([30, 24]);
+        ctx.lineDashOffset = -trackOffset;
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // 5. Pickups (Nitros y Poderes)
     pickups.forEach(item => {
         if (item.collected) return;
+        const diffKm = item.km - me.totalKm;
+        const screenY = PLAYER_SCREEN_Y - (diffKm * 8);
+        if (screenY < -40 || screenY > canvas.height + 40) return;
+        const screenX = ROAD_LEFT + item.lane * LANE_WIDTH + LANE_WIDTH / 2;
 
-        const ix = center.x + Math.cos(item.angle) * item.radius;
-        const iy = center.y + Math.sin(item.angle) * item.radius;
-        const dist = Math.hypot(px - ix, py - iy);
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, 16, 0, Math.PI * 2);
+        ctx.fillStyle = item.type === "nitro" ? "rgba(0, 229, 255, 0.4)" : "rgba(199, 125, 255, 0.4)";
+        ctx.fill();
 
-        if (dist < 26) {
-            item.collected = true;
+        ctx.font = "24px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(item.type === "nitro" ? "⚡" : "🔮", screenX, screenY);
+    });
 
-            if (item.type === "boost") {
-                totalBoosts++;
-                boostTimer = 5;
-                player.maxSpeed = player.baseMaxSpeed * 1.25;
-                player.speed = player.maxSpeed;
-                sounds.playBoost();
-                triggerHaptic(40);
-                document.getElementById("message").textContent = "⚡ ¡Nitro activado! +25% de velocidad";
+    // 6. Obstáculos (Rocas y Charcos)
+    obstacles.forEach(obs => {
+        const diffKm = obs.km - me.totalKm;
+        const screenY = PLAYER_SCREEN_Y - (diffKm * 8);
+        if (screenY < -40 || screenY > canvas.height + 40) return;
+        const screenX = ROAD_LEFT + obs.lane * LANE_WIDTH + LANE_WIDTH / 2;
+
+        ctx.font = "26px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(obs.type === "rock" ? "🪨" : "💧", screenX, screenY);
+    });
+
+    // 7. Partículas de escape y turbo
+    particles.forEach(pt => {
+        ctx.save();
+        ctx.globalAlpha = pt.life / pt.maxLife;
+        ctx.fillStyle = pt.color;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    });
+
+    // 8. Rivales (IAs u otros jugadores) en la pista cenital
+    players.forEach(p => {
+        if (!p || p.slot === myActiveSlot) return;
+
+        const diffKm = p.totalKm - me.totalKm;
+        const screenY = PLAYER_SCREEN_Y - (diffKm * 8);
+        if (screenY < -60 || screenY > canvas.height + 60) return;
+
+        const screenX = getRacerScreenX(p);
+
+        // Resplandor si tiene turbo
+        if (p.powerTimer > 0 || p.nitroTimer > 0) {
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, 30, 0, Math.PI * 2);
+            ctx.fillStyle = p.powerTimer > 0 ? "rgba(232, 121, 249, 0.6)" : "rgba(0, 229, 255, 0.6)";
+            ctx.fill();
+        }
+
+        ctx.font = "44px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(p.character.emoji || "🐅", screenX, screenY);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 12px Arial";
+        ctx.fillText(p.name, screenX, screenY - 30);
+    });
+
+    // 9. El Corredor del Jugador Local (en 1ª Persona Cenital)
+    if (me) {
+        const myX = getRacerScreenX(me);
+        const myY = PLAYER_SCREEN_Y;
+
+        // Aura de poder o nitro
+        if (me.powerTimer > 0 || me.nitroTimer > 0) {
+            ctx.beginPath();
+            ctx.arc(myX, myY, 34, 0, Math.PI * 2);
+            ctx.fillStyle = me.powerTimer > 0 ? "rgba(232, 121, 249, 0.7)" : "rgba(0, 229, 255, 0.7)";
+            ctx.fill();
+        }
+
+        ctx.save();
+        ctx.translate(myX, myY);
+        if (me.tilt) ctx.rotate(me.tilt);
+
+        // Avatar gigante en primera persona cenital
+        ctx.font = "52px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(me.character ? me.character.emoji : "🐉", 0, 0);
+        ctx.restore();
+
+        // Corona / Etiqueta del jugador
+        ctx.fillStyle = "#ffd166";
+        ctx.font = "bold 13px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(`👑 ${me.name}`, myX, myY - 36);
+    }
+}
+
+function drawVerticalCurb(x, offset) {
+    const curbH = 26;
+    const startY = -(offset % (curbH * 2));
+    for (let y = startY - curbH; y < canvas.height + curbH * 2; y += curbH) {
+        ctx.fillStyle = (Math.floor((y + offset) / curbH) % 2 === 0) ? "#ef4444" : "#ffffff";
+        ctx.fillRect(x, y, 12, curbH);
+    }
+}
+
+function updateHUD() {
+    const me = players[myActiveSlot];
+    if (!me) return;
+
+    document.getElementById("lapVal").textContent = Math.min(3, me.currentLap);
+    document.getElementById("kmVal").textContent = Math.min(TOTAL_RACE_KM, Math.floor(me.totalKm));
+    document.getElementById("speedVal").textContent = Math.round(me.speed);
+    document.getElementById("laneVal").textContent = me.targetLane + 1;
+    document.getElementById("powerCount").textContent = me.powerCount;
+
+    const badge = document.getElementById("powerBadge");
+    if (badge) badge.textContent = me.powerCount;
+
+    const btnPwr = document.getElementById("btnPower");
+    if (btnPwr) btnPwr.classList.toggle("ready", me.powerCount > 0);
+
+    // Posición actual
+    const active = players.filter(p => p !== null);
+    active.sort((a, b) => b.totalKm - a.totalKm);
+    const myRank = active.findIndex(p => p.slot === myActiveSlot) + 1;
+    document.getElementById("rankBadge").textContent = `${myRank}º / ${active.length}`;
+
+    // Barra de progreso de los 10.000 km
+    players.forEach((p, idx) => {
+        const prog = document.getElementById(`progRunner${idx}`);
+        if (prog) {
+            if (p) {
+                prog.style.display = "block";
+                prog.textContent = p.character.emoji || "🐉";
+                const pct = Math.min(100, Math.max(0, (p.totalKm / TOTAL_RACE_KM) * 100));
+                prog.style.left = `${pct}%`;
             } else {
-                totalPowers++;
-                sounds.playPowerPickup();
-                triggerHaptic(50);
-                document.getElementById("message").textContent = "🔮 ¡Píldora de poder recogida! Presiona PODER";
+                prog.style.display = "none";
             }
         }
     });
 }
 
-/* =====================================================================
-   DIBUJO EN CANVAS CON ALTA DEFINICIÓN
-   ===================================================================== */
-function drawTrack() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function checkRaceCompletion() {
+    const active = players.filter(p => p !== null);
+    const allFinished = active.every(p => p.finished);
 
-    // Fondo césped exterior
-    ctx.fillStyle = "#1e3a2b";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Borde exterior de grava/pasto
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, outerRadius + 8, 0, Math.PI * 2);
-    ctx.fillStyle = "#14291e";
-    ctx.fill();
-
-    // Pista de asfalto
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, outerRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#475569";
-    ctx.fill();
-
-    // Césped interior
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, innerRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#1e3a2b";
-    ctx.fill();
-
-    // Bordillo interior
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, innerRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "#cbd5e1";
-    ctx.lineWidth = 4;
-    ctx.stroke();
-
-    // Bordillo exterior
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, outerRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "#cbd5e1";
-    ctx.lineWidth = 4;
-    ctx.stroke();
-
-    // Líneas divisoras de carril (carril central y secundarios)
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, trackRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "#f8fafc";
-    ctx.lineWidth = 3;
-    ctx.setLineDash([16, 14]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Línea de salida/meta cuadriculada
-    ctx.save();
-    ctx.translate(center.x, center.y);
-    ctx.rotate(-Math.PI / 2);
-    const cols = 2;
-    const rows = 10;
-    const cellW = (outerRadius - innerRadius) / rows;
-    for (let c = 0; c < cols; c++) {
-        for (let r = 0; r < rows; r++) {
-            ctx.fillStyle = (c + r) % 2 === 0 ? "#ffffff" : "#0f172a";
-            ctx.fillRect(innerRadius + r * cellW, -8 + c * 8, cellW, 8);
-        }
+    if (allFinished) {
+        raceState = "finished";
+        showPodiumResults();
     }
-    ctx.restore();
-
-    // Logo central del circuito
-    ctx.fillStyle = "#ffd166";
-    ctx.font = "bold 20px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("🐉 ZODIAC RACING", center.x, center.y - 12);
-    ctx.fillStyle = "#94a3b8";
-    ctx.font = "bold 13px Arial";
-    ctx.fillText("CIRCUITO ELEMENTAL", center.x, center.y + 12);
 }
 
-function drawParticles() {
-    particles.forEach(p => {
-        ctx.save();
-        ctx.globalAlpha = p.life / p.maxLife;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+function showPodiumResults() {
+    const list = document.getElementById("podiumList");
+    list.innerHTML = "";
+
+    const sorted = [...players.filter(p => p !== null)].sort((a, b) => {
+        if (a.finished && b.finished) return a.finishTime - b.finishTime;
+        if (a.finished) return -1;
+        if (b.finished) return 1;
+        return b.totalKm - a.totalKm;
     });
-}
 
-function drawPickups() {
-    pickups.forEach(item => {
-        if (item.collected) return;
-
-        const x = center.x + Math.cos(item.angle) * item.radius;
-        const y = center.y + Math.sin(item.angle) * item.radius;
-
-        // Aura pulsante
-        ctx.beginPath();
-        ctx.arc(x, y, 13, 0, Math.PI * 2);
-        ctx.fillStyle = item.type === "boost" ? "rgba(0, 229, 255, 0.4)" : "rgba(199, 125, 255, 0.4)";
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(x, y, 10, 0, Math.PI * 2);
-        ctx.fillStyle = item.type === "boost" ? "#00e5ff" : "#c77dff";
-        ctx.fill();
-
-        ctx.font = "bold 13px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#0f172a";
-        ctx.fillText(item.type === "boost" ? "⚡" : "✦", x, y);
+    sorted.forEach((p, idx) => {
+        const item = document.createElement("div");
+        item.className = `podium-item ${idx === 0 ? 'first' : ''}`;
+        const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : "4º";
+        item.innerHTML = `
+            <div>
+                <span style="font-size:18px; margin-right:6px;">${medal}</span>
+                <span>${p.character.emoji} <b>${p.name}</b></span>
+            </div>
+            <div style="color:var(--accent);">
+                ${p.finished ? `${p.finishTime.toFixed(2)}s` : `${Math.floor(p.totalKm)} km`}
+            </div>
+        `;
+        list.appendChild(item);
     });
+
+    document.getElementById("resultsModal").style.display = "flex";
 }
 
-function drawPlayer() {
-    const x = center.x + Math.cos(player.angle) * player.radius;
-    const y = center.y + Math.sin(player.angle) * player.radius;
-
-    // Resplandor si tiene boost o poder activo
-    if (boostTimer > 0 || powerTimer > 0) {
-        ctx.beginPath();
-        ctx.arc(x, y, 26, 0, Math.PI * 2);
-        ctx.fillStyle = powerTimer > 0 ? "rgba(232, 121, 249, 0.5)" : "rgba(0, 229, 255, 0.5)";
-        ctx.fill();
-    }
-
-    ctx.save();
-    ctx.translate(x, y);
-    // Orientar hacia la dirección del movimiento tangencial
-    ctx.rotate(player.angle + Math.PI / 2);
-
-    ctx.font = "36px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(character ? character.emoji : "🐉", 0, 0);
-
-    ctx.restore();
-
-    // Etiqueta del signo
-    if (character) {
-        ctx.fillStyle = "#ffd166";
-        ctx.font = "bold 12px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(character.sign, x, y - 26);
-    }
+function closeResultsAndReset() {
+    document.getElementById("resultsModal").style.display = "none";
+    exitRaceToMenu();
 }
 
-function draw() {
-    drawTrack();
-    drawParticles();
-    drawPickups();
-    drawPlayer();
+function exitRaceToMenu() {
+    gameRunning = false;
+    raceState = "idle";
+    document.getElementById("gameArea").style.display = "none";
+    document.getElementById("menu").style.display = "block";
+    document.getElementById("calendarSection").style.display = "block";
 }
 
 function gameLoop(timestamp) {
     if (!gameRunning) return;
-
-    const delta = Math.min((timestamp - lastTime) / 1000, 0.05);
-    lastTime = timestamp;
+    const delta = Math.min((timestamp - lastTimestamp) / 1000, 0.05);
+    lastTimestamp = timestamp;
 
     update(delta);
     draw();
@@ -1249,46 +2165,23 @@ function gameLoop(timestamp) {
     }
 }
 
-function finishGame() {
-    gameRunning = false;
-    player.speed = 0;
-    draw();
-
-    sounds.playWin();
-    triggerHaptic([100, 50, 100, 50, 250]);
-
-    document.getElementById("message").innerHTML =
-        `🏆 ¡FELICITACIONES! Has completado las 3 vueltas en <b>${raceElapsedTime}s</b> con tu ${character.emoji} ${character.animal}!`;
-}
-
-function usePower() {
-    sounds.init();
-    if (!gameRunning || totalPowers <= 0) return;
-
-    totalPowers--;
-    powerTimer = 4;
-    player.maxSpeed = player.baseMaxSpeed * 1.35;
-    player.speed = player.maxSpeed;
-
-    sounds.playUsePower();
-    triggerHaptic([60, 40, 90]);
-
-    document.getElementById("message").textContent = "✨ ¡PODER ZODIACAL ACTIVADO! Máxima aceleración.";
-    updateHUD();
-}
-
 /* =====================================================================
-   MANEJO DE CONTROLES: TECLADO (WINDOWS) Y TÁCTIL (ANDROID)
+   MANEJO DE CONTROLES: TECLADO Y BOTONES TÁCTILES ANDROID
    ===================================================================== */
-// Soporte de Teclado físico
 window.addEventListener("keydown", e => {
     sounds.init();
     const key = e.key.toLowerCase();
     keys[key] = true;
 
-    if (e.code === "Space") {
+    if (e.code === "ArrowLeft" || key === "a") {
         e.preventDefault();
-        usePower();
+        steerLane("left");
+    } else if (e.code === "ArrowRight" || key === "d") {
+        e.preventDefault();
+        steerLane("right");
+    } else if (e.code === "Space") {
+        e.preventDefault();
+        useSpecialPower();
     }
 });
 
@@ -1296,69 +2189,53 @@ window.addEventListener("keyup", e => {
     keys[e.key.toLowerCase()] = false;
 });
 
-// Soporte de Controles Táctiles Multi-touch
-function bindTouchButton(btnId, keyName, isAction = false, actionFn = null) {
+function bindTouchAction(btnId, onDown, onUp = null) {
     const btn = document.getElementById(btnId);
     if (!btn) return;
 
-    const startHandler = (e) => {
+    const start = (e) => {
         e.preventDefault();
         sounds.init();
         btn.classList.add("pressed");
-        if (isAction && actionFn) {
-            actionFn();
-        } else {
-            keys[keyName] = true;
-        }
+        if (onDown) onDown();
     };
 
-    const endHandler = (e) => {
+    const end = (e) => {
         e.preventDefault();
         btn.classList.remove("pressed");
-        if (!isAction) {
-            keys[keyName] = false;
-        }
+        if (onUp) onUp();
     };
 
-    btn.addEventListener("touchstart", startHandler, { passive: false });
-    btn.addEventListener("touchend", endHandler, { passive: false });
-    btn.addEventListener("touchcancel", endHandler, { passive: false });
-
-    // También permitir mouse en PC para pruebas
-    btn.addEventListener("mousedown", startHandler);
-    btn.addEventListener("mouseup", endHandler);
-    btn.addEventListener("mouseleave", endHandler);
+    btn.addEventListener("touchstart", start, { passive: false });
+    btn.addEventListener("touchend", end, { passive: false });
+    btn.addEventListener("touchcancel", end, { passive: false });
+    btn.addEventListener("mousedown", start);
+    btn.addEventListener("mouseup", end);
+    btn.addEventListener("mouseleave", end);
 }
 
 function setupTouchControls() {
-    bindTouchButton("btnLeft", "left");
-    bindTouchButton("btnRight", "right");
-    bindTouchButton("btnGas", "gas");
-    bindTouchButton("btnBrake", "brake");
-    bindTouchButton("btnPower", null, true, usePower);
+    bindTouchAction("btnSteerLeft", () => steerLane("left"));
+    bindTouchAction("btnSteerRight", () => steerLane("right"));
+    bindTouchAction("btnGas", () => { keys["gas"] = true; }, () => { keys["gas"] = false; });
+    bindTouchAction("btnBrake", () => { keys["brake"] = true; }, () => { keys["brake"] = false; });
+    bindTouchAction("btnPower", () => useSpecialPower());
 
-    // Detección automática de dispositivo táctil
-    const isTouchDevice = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
+    const isTouch = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
     const touchPanel = document.getElementById("touchControls");
-    if (isTouchDevice) {
+    if (isTouch) {
         touchPanel.style.display = "block";
         document.getElementById("btnToggleTouch").classList.add("active");
     }
 }
 
-let touchForcedState = null;
+let touchForced = null;
 function toggleTouchControls() {
     const touchPanel = document.getElementById("touchControls");
     const btn = document.getElementById("btnToggleTouch");
-    if (touchForcedState === null) {
-        touchForcedState = touchPanel.style.display === "block" ? false : true;
-    } else {
-        touchForcedState = !touchForcedState;
-    }
-
-    touchPanel.style.display = touchForcedState ? "block" : "none";
-    btn.textContent = touchForcedState ? "📱 Controles: SI" : "📱 Controles: NO";
-    btn.classList.toggle("active", touchForcedState);
+    touchForced = touchForced === null ? (touchPanel.style.display !== "block") : !touchForced;
+    touchPanel.style.display = touchForced ? "block" : "none";
+    btn.classList.toggle("active", touchForced);
 }
 
 function toggleSound() {
@@ -1380,63 +2257,41 @@ function toggleSound() {
 
 function toggleFullscreen() {
     sounds.init();
-    const docEl = document.documentElement;
+    const el = document.documentElement;
     if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        if (docEl.requestFullscreen) {
-            docEl.requestFullscreen().catch(() => {});
-        } else if (docEl.webkitRequestFullscreen) {
-            docEl.webkitRequestFullscreen();
-        }
+        if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
     } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen().catch(() => {});
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
     }
 }
 
-/* =====================================================================
-   MODAL DE CÓDIGO QR Y CONEXIÓN CON ANDROID
-   ===================================================================== */
 function openQrModal() {
-    sounds.init();
-    const modal = document.getElementById("qrModal");
-    modal.style.display = "flex";
-
-    // Consultar información del servidor local
-    fetch("/api/info")
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById("serverUrlText").textContent = data.url;
-            document.getElementById("qrImage").src = `/api/qr.svg?t=${Date.now()}`;
-        })
-        .catch(() => {
-            // Si se abrió como archivo local file://
-            const localHref = window.location.href;
-            document.getElementById("serverUrlText").textContent =
-                "Inicia server.py para ver el código QR y conectar tu celular.";
-            showQrFallback();
-        });
+    document.getElementById("qrModal").style.display = "flex";
 }
-
-function closeQrModal(e) {
+function closeQrModal() {
     document.getElementById("qrModal").style.display = "none";
 }
 
-function showQrFallback() {
-    document.getElementById("qrImage").style.display = "none";
-    document.getElementById("qrFallback").style.display = "block";
-}
+window.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const serverParam = params.get("server");
+    const roomParam = params.get("room");
 
-/* =====================================================================
-   REGISTRO DE SERVICE WORKER PARA PWA (OFFLINE EN ANDROID Y WINDOWS)
-   ===================================================================== */
+    if (serverParam) {
+        document.getElementById("serverWsInput").value = serverParam.startsWith("ws://") ? serverParam : `ws://${serverParam}`;
+    }
+    if (roomParam) {
+        switchMode("online");
+        document.getElementById("roomCodeInput").value = roomParam.toUpperCase();
+        setTimeout(() => joinOnlineRoom(), 600);
+    }
+});
+
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js")
-            .then(reg => console.log("Service Worker registrado con éxito:", reg.scope))
-            .catch(err => console.log("Service Worker no registrado (modo local):", err));
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
     });
 }
 </script>
