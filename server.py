@@ -1,68 +1,181 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+ZODIAC RACING 2D - Servidor Local Multiplataforma (Android y Windows)
+Permite jugar en Windows y conectar celulares Android en la misma red Wi-Fi
+mediante Código QR o enlace directo.
+"""
+
+import os
+import sys
+import io
+import json
+import socket
+import threading
+import webbrowser
 from pathlib import Path
-import zipfile, json
+from http.server import SimpleHTTPRequestHandler
+from socketserver import ThreadingTCPServer
 
-base = Path("/mnt/data/zodiac_racing_multiplayer")
-html_path = base / "public" / "index.html"
-server_path = base / "server.js"
+# Intentar importar qrcode para terminal y SVG
+QRCODE_AVAILABLE = False
+try:
+    import qrcode
+    from qrcode.image.svg import SvgImage
+    QRCODE_AVAILABLE = True
+except ImportError:
+    pass
 
-html = html_path.read_text(encoding="utf-8")
-html = html.replace(
-    '<input id="roomPassword" type="password" maxlength="64" placeholder="Contraseña">',
-    '<input id="roomPassword" type="password" value="1998" readonly aria-label="Contraseña fija de la sala">'
-)
-html = html.replace(
-    'Escribe tu nombre y una contraseña para la sala.',
-    'Escribe tu nombre. La contraseña de la sala es 1998.'
-)
-html_path.write_text(html, encoding="utf-8")
+BASE_DIR = Path(__file__).resolve().parent
 
-server = server_path.read_text(encoding="utf-8")
-server = server.replace('const MAX_PLAYERS = 5;', 'const MAX_PLAYERS = 5;\nconst ROOM_PASSWORD = "1998";')
-server = server.replace(
-'''    if (typeof nickname !== "string" || !nickname.trim() ||
-        typeof password !== "string" || password.length < 4 || password.length > 64) {
-      return socket.emit("room:error", "Nombre requerido y contraseña de 4 a 64 caracteres.");
-    }
-    const code = makeCode();
-    const salt = crypto.randomBytes(16);
-    const room = { code, salt, passwordHash: passwordHash(password, salt), players: new Set() };''',
-'''    if (typeof nickname !== "string" || !nickname.trim()) {
-      return socket.emit("room:error", "Escribe un nombre para tu corredor.");
-    }
-    if (password !== ROOM_PASSWORD) {
-      return socket.emit("room:error", "La contraseña fija de las salas es incorrecta.");
-    }
-    const code = makeCode();
-    const salt = crypto.randomBytes(16);
-    const room = { code, salt, passwordHash: passwordHash(ROOM_PASSWORD, salt), players: new Set() };'''
-)
-server = server.replace(
-'''    if (typeof nickname !== "string" || !nickname.trim() ||
-        typeof password !== "string" || password.length < 4 || password.length > 64) {
-      return socket.emit("room:error", "Nombre requerido y contraseña de 4 a 64 caracteres.");
-    }
-    const supplied = passwordHash(password, room.salt);''',
-'''    if (typeof nickname !== "string" || !nickname.trim()) {
-      return socket.emit("room:error", "Escribe un nombre para tu corredor.");
-    }
-    const supplied = passwordHash(typeof password === "string" ? password : "", room.salt);'''
-)
-server_path.write_text(server, encoding="utf-8")
+def get_local_ip():
+    """Obtiene la dirección IP local de la computadora en la red Wi-Fi / LAN"""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('10.255.255.255', 1))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'
+    finally:
+        s.close()
+    return ip
 
-readme_path = base / "README.md"
-readme = readme_path.read_text(encoding="utf-8")
-readme = readme.replace(
-    'salas privadas con código de 6 caracteres y contraseña.',
-    'salas privadas con código de 6 caracteres y contraseña fija `1998`.'
-)
-readme = readme.replace(
-    'Escribe tu nombre y una contraseña de al menos 4 caracteres y pulsa **CREAR SALA**.',
-    'Escribe tu nombre (la contraseña fija es `1998`) y pulsa **CREAR SALA**.'
-)
-readme = readme.replace(
-    'Los demás abren la dirección del servidor, crean su personaje, escriben el mismo código y contraseña y pulsan **UNIRSE A SALA**.',
-    'Los demás abren la dirección del servidor, crean su personaje, escriben el mismo código (la contraseña ya está configurada como `1998`) y pulsan **UNIRSE A SALA**.'
-)
-readme += "\n\n**Contraseña compartida configurada:** `1998`. Cámbiala en `server.js` si más adelante quieres otra.\n"
-readme_path.write_text(readme, encoding="utf-8")
+def find_available_port(start_port=8000, max_attempts=25):
+    """Busca un puerto libre a partir de start_port"""
+    for port in range(start_port, start_port + max_attempts):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.bind(('0.0.0.0', port))
+                return port
+            except OSError:
+                continue
+    return start_port
 
+LOCAL_IP = get_local_ip()
+PORT = find_available_port(8000)
+SERVER_URL = f"http://{LOCAL_IP}:{PORT}"
+LOCAL_URL = f"http://localhost:{PORT}"
+
+class ZodiacGameHandler(SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(BASE_DIR), **kwargs)
+
+    def end_headers(self):
+        # Habilitar CORS y evitar problemas de caché en desarrollo
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        super().end_headers()
+
+    def do_GET(self):
+        # Endpoint de información de red para el frontend
+        if self.path == '/api/info':
+            payload = json.dumps({
+                "local_ip": LOCAL_IP,
+                "port": PORT,
+                "url": SERVER_URL,
+                "local_url": LOCAL_URL,
+                "qrcode_available": QRCODE_AVAILABLE
+            }).encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Content-Length', str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
+            return
+
+        # Endpoint de Código QR en formato SVG
+        if self.path == '/api/qr.svg':
+            if QRCODE_AVAILABLE:
+                qr = qrcode.QRCode(image_factory=SvgImage, border=1)
+                qr.add_data(SERVER_URL)
+                img = qr.make_image()
+                buf = io.BytesIO()
+                img.save(buf)
+                svg_data = buf.getvalue()
+                self.send_response(200)
+                self.send_header('Content-Type', 'image/svg+xml')
+                self.send_header('Content-Length', str(len(svg_data)))
+                self.end_headers()
+                self.wfile.write(svg_data)
+                return
+            else:
+                self.send_response(404)
+                self.end_headers()
+                return
+
+        # Redirigir la raíz al juego principal si index.html no existe
+        if self.path == '/' or self.path == '/index.html':
+            target = BASE_DIR / 'index.html'
+            if not target.exists():
+                fallback = BASE_DIR / 'Zodiac_Racing_2D_calendario_animales.html'
+                if fallback.exists():
+                    self.path = '/Zodiac_Racing_2D_calendario_animales.html'
+
+        return super().do_GET()
+
+    def guess_type(self, path):
+        # Asegurar tipos MIME correctos para PWA
+        if path.endswith('.webmanifest') or path.endswith('manifest.json'):
+            return 'application/manifest+json'
+        if path.endswith('.svg'):
+            return 'image/svg+xml'
+        if path.endswith('.js'):
+            return 'application/javascript; charset=utf-8'
+        return super().guess_type(path)
+
+    def log_message(self, format, *args):
+        # Silenciar logs ruidosos de archivos estáticos individuales
+        first_arg = args[0] if args else ''
+        if any(ext in first_arg for ext in ['.png', '.svg', '.ico', '/api/']):
+            return
+        super().log_message(format, *args)
+
+def print_banner():
+    width = 68
+    print("\n" + "=" * width)
+    print(" 🐉  ZODIAC RACING 2D - SERVIDOR PARA ANDROID Y WINDOWS  🏁 ".center(width))
+    print("=" * width)
+    print(f" * PC (Windows):            {LOCAL_URL}")
+    print(f" * Celular Android (Wi-Fi): {SERVER_URL}")
+    print("=" * width)
+
+    if QRCODE_AVAILABLE:
+        print("\n [!] ESCANEA ESTE CÓDIGO QR CON LA CÁMARA DE TU CELULAR ANDROID:\n")
+        try:
+            qr = qrcode.QRCode(border=1)
+            qr.add_data(SERVER_URL)
+            qr.print_ascii(invert=True)
+        except Exception:
+            pass
+        print("")
+
+    print(" INSTRUCCIONES PARA ANDROID:")
+    print(" 1. Asegúrate de que el celular esté conectado a tu misma red Wi-Fi.")
+    print(f" 2. Abre Google Chrome o Firefox y ve a: {SERVER_URL}")
+    print(" 3. Para instalarlo como App nativa en tu celular:")
+    print("    Toca los 3 puntos (⋮) arriba a la derecha y pulsa:")
+    print("    'Instalar aplicación' o 'Agregar a la pantalla principal'.")
+    print("=" * width)
+    print(" Presiona Ctrl + C en esta ventana para detener el servidor.\n")
+
+def main():
+    ThreadingTCPServer.allow_reuse_address = True
+    with ThreadingTCPServer(('0.0.0.0', PORT), ZodiacGameHandler) as httpd:
+        print_banner()
+
+        # Abrir automáticamente en el navegador de Windows tras 1 segundo
+        def open_browser():
+            try:
+                webbrowser.open(LOCAL_URL)
+            except Exception:
+                pass
+        threading.Timer(0.8, open_browser).start()
+
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("\nDeteniendo servidor... ¡Gracias por jugar a Zodiac Racing 2D!\n")
+            httpd.server_close()
+
+if __name__ == '__main__':
+    main()

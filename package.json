@@ -1,0 +1,20 @@
+{
+  "name": "zodiac-racing-2d",
+  "version": "1.0.0",
+  "description": "Zodiac Racing 2D - Juego de carreras para Android y Windows",
+  "main": "index.html",
+  "scripts": {
+    "start": "python server.py",
+    "android:init": "npx @capacitor/cli init \"Zodiac Racing\" com.zodiac.racing --web-dir .",
+    "android:add": "npx @capacitor/cli add android",
+    "android:open": "npx @capacitor/cli open android",
+    "android:build": "npx @capacitor/cli copy && npx @capacitor/cli sync"
+  },
+  "keywords": ["game", "racing", "zodiac", "android", "windows"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/android": "^6.0.0"
+  }
+}

@@ -2,164 +2,687 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zodiac Racing 2D</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#18263d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Zodiac Racing 2D - Juego de carreras para Android y Windows">
+<title>🐉 Zodiac Racing 2D - Elemental Edition 🏁</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-192.png">
 
 <style>
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --bg-dark: #101827;
+    --panel-bg: #1c2c45;
+    --panel-sub: #263b59;
+    --accent: #ffd166;
+    --accent-hover: #ffb703;
+    --gas-color: #06d6a0;
+    --brake-color: #ef476f;
+    --power-color: #c77dff;
+    --boost-color: #00e5ff;
 }
 
 body {
     margin: 0;
-    background: #101827;
+    padding: 0;
+    background: var(--bg-dark);
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     text-align: center;
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Barra superior de acciones */
+.top-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: #141f32;
+    padding: 8px 12px;
+    border-bottom: 2px solid #263b59;
+}
+
+.top-btn {
+    background: #263b59;
+    color: #ffd166;
+    border: 1px solid #ffd166;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.top-btn:hover {
+    background: #ffd166;
+    color: #101827;
+}
+
+.top-btn.active {
+    background: #ffd166;
+    color: #101827;
 }
 
 header {
-    padding: 15px;
+    padding: 12px 10px;
     background: #18263d;
 }
 
 h1 {
-    margin: 5px;
-    color: #ffd166;
+    margin: 4px;
+    color: var(--accent);
+    font-size: clamp(22px, 5vw, 32px);
+    letter-spacing: 1px;
+}
+
+p.subtitle {
+    margin: 4px;
+    color: #94a3b8;
+    font-size: 14px;
 }
 
 .panel {
-    background: #1c2c45;
-    padding: 15px;
+    background: var(--panel-bg);
+    padding: 18px;
     margin: 15px auto;
-    border-radius: 12px;
-    max-width: 650px;
+    border-radius: 14px;
+    max-width: 680px;
+    width: 94%;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
 }
 
 input, select, button {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 7px;
+    padding: 10px 14px;
+    margin: 6px;
+    border-radius: 8px;
     border: none;
     font-size: 15px;
+    font-family: inherit;
 }
 
-button {
-    background: #ffd166;
-    color: #172033;
+input, select {
+    background: #0f172a;
+    color: #fff;
+    border: 1px solid #334155;
+}
+
+input:focus, select:focus {
+    outline: 2px solid var(--accent);
+}
+
+button.primary {
+    background: var(--accent);
+    color: #101827;
     font-weight: bold;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 209, 102, 0.3);
+    transition: all 0.15s ease-in-out;
 }
 
-button:hover {
-    background: #ffb703;
+button.primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
 }
 
+button.primary:active {
+    transform: translateY(1px);
+}
+
+#characterInfo {
+    margin-top: 15px;
+    padding: 12px;
+    background: var(--panel-sub);
+    border-radius: 10px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ÁREA DE JUEGO */
 #gameArea {
     display: none;
-    width: min(96vw, 900px);
-    margin: 15px auto;
+    width: min(98vw, 920px);
+    margin: 8px auto;
+    position: relative;
+}
+
+#hud {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.hudItem {
+    background: var(--panel-sub);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    border: 1px solid rgba(255,209,102,0.2);
+}
+
+.canvas-container {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 3px solid var(--accent);
 }
 
 canvas {
     width: 100%;
     height: auto;
-    background: #172d32;
-    border: 3px solid #ffd166;
-    border-radius: 12px;
+    background: #1e3a2b;
     display: block;
-}
-
-#hud {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-
-.hudItem {
-    background: #263b59;
-    padding: 10px;
-    border-radius: 8px;
-    min-width: 110px;
+    touch-action: none;
 }
 
 #message {
+    color: var(--accent);
+    min-height: 24px;
+    margin: 8px 0;
+    font-weight: bold;
+    font-size: clamp(14px, 3.5vw, 17px);
+}
+
+.controls-guide {
+    margin: 6px;
+    color: #cbd5e1;
+    font-size: 13px;
+}
+
+/* CONTROLES TÁCTILES VIRTUALES (OPTIMIZADOS PARA ANDROID / CELULAR) */
+#touchControls {
+    display: none;
+    margin: 10px auto;
+    width: 100%;
+    max-width: 820px;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.touch-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 4px;
+}
+
+.touch-cluster {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.touch-btn {
+    position: relative;
+    border: none;
+    border-radius: 14px;
+    font-weight: 900;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: transform 0.08s, filter 0.08s;
+    min-height: 58px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.touch-btn:active, .touch-btn.pressed {
+    transform: scale(0.92);
+    filter: brightness(1.25);
+}
+
+.btn-steer {
+    background: #2563eb;
+    min-width: 68px;
+    font-size: 18px;
+    border-bottom: 4px solid #1d4ed8;
+}
+
+.btn-gas {
+    background: #059669;
+    min-width: 78px;
+    border-bottom: 4px solid #047857;
+}
+
+.btn-brake {
+    background: #dc2626;
+    min-width: 66px;
+    font-size: 14px;
+    border-bottom: 4px solid #b91c1c;
+}
+
+.btn-power {
+    background: #9333ea;
+    min-width: 74px;
+    border-bottom: 4px solid #7e22ce;
+}
+
+.btn-power.ready {
+    animation: pulsePower 1.2s infinite alternate;
+}
+
+@keyframes pulsePower {
+    from { box-shadow: 0 0 10px #c084fc; }
+    to { box-shadow: 0 0 22px #e879f9, 0 0 35px #a855f7; }
+}
+
+.badge-count {
+    background: #ffd166;
+    color: #111;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 2px 7px;
+    margin-top: 2px;
+}
+
+/* MODAL DE CÓDIGO QR / ANDROID */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #1c2c45;
+    border: 2px solid #ffd166;
+    border-radius: 16px;
+    padding: 24px 20px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
     color: #ffd166;
-    min-height: 25px;
+    font-size: 26px;
+    cursor: pointer;
     font-weight: bold;
 }
 
-.controls {
-    margin: 12px;
-    color: #cbd5e1;
+.qr-box {
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    display: inline-block;
+    margin: 14px auto;
+    max-width: 240px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.qr-box img, .qr-box svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.server-url-badge {
+    background: #0f172a;
+    border: 1px solid #ffd166;
+    color: #ffd166;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: bold;
+    word-break: break-all;
+    margin: 10px 0;
+}
+
+.step-list {
+    text-align: left;
+    background: #263b59;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Calendario de animales */
+#animalYears {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+    gap: 8px;
+    text-align: left;
+}
+
+.year-card {
+    background: var(--panel-sub);
+    padding: 8px;
+    border-radius: 7px;
+    font-size: 13px;
+}
+
+/* Adaptación para pantallas de celular en horizontal y vertical */
+@media (max-width: 600px) {
+    .touch-btn {
+        min-height: 52px;
+        padding: 6px;
+        font-size: 13px;
+    }
+    .btn-steer { min-width: 58px; font-size: 15px; }
+    .btn-gas { min-width: 66px; }
+    .btn-brake { min-width: 56px; }
+    .btn-power { min-width: 60px; }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    header, #animalCalendar {
+        display: none !important;
+    }
+    .top-bar {
+        padding: 4px;
+    }
+    #gameArea {
+        width: 98vw;
+        margin: 2px auto;
+    }
+    canvas {
+        max-height: 58vh;
+    }
+    .touch-btn {
+        min-height: 48px;
+    }
 }
 </style>
 </head>
 
 <body>
 
+<!-- BARRA SUPERIOR DE ACCIONES -->
+<div class="top-bar">
+    <button class="top-btn" id="btnQrModal" onclick="openQrModal()">
+        <span>📲</span> Jugar en Android (QR)
+    </button>
+    <button class="top-btn" id="btnFullscreen" onclick="toggleFullscreen()">
+        <span>⛶</span> Pantalla Completa
+    </button>
+    <button class="top-btn" id="btnSound" onclick="toggleSound()">
+        <span id="soundIcon">🔊</span> Sonido: ON
+    </button>
+    <button class="top-btn" id="btnToggleTouch" onclick="toggleTouchControls()">
+        <span>📱</span> Controles: Auto
+    </button>
+</div>
+
 <header>
     <h1>🐉 ZODIAC RACING 2D 🏁</h1>
-    <p>Elemental Edition</p>
+    <p class="subtitle">Elemental Edition · Compatible con Windows y Android</p>
 </header>
 
+<!-- SECCIÓN CREAR CORREDOR -->
 <section id="menu" class="panel">
     <h2>Crear corredor zodiacal</h2>
+    <p>Introduce tu fecha de nacimiento para descubrir tu animal y clase elemental:</p>
 
-    <p>Fecha de nacimiento</p>
+    <div>
+        <input type="number" id="day" placeholder="Día" min="1" max="31">
+        <input type="number" id="month" placeholder="Mes" min="1" max="12">
+        <input type="number" id="year" placeholder="Año" min="1945" max="2033">
+        <select id="gender">
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+        </select>
+    </div>
 
-    <input type="number" id="day" placeholder="Día" min="1" max="31">
-    <input type="number" id="month" placeholder="Mes" min="1" max="12">
-    <input type="number" id="year" placeholder="Año" min="1945" max="2033">
-
-    <br>
-
-    <select id="gender">
-        <option value="masculino">Masculino</option>
-        <option value="femenino">Femenino</option>
-    </select>
-
-    <br>
-
-    <button onclick="createCharacter()">CREAR PERSONAJE</button>
+    <button class="primary" onclick="createCharacter()" style="font-size:16px; margin-top:12px;">CREAR PERSONAJE</button>
 
     <div id="characterInfo"></div>
 </section>
 
+<!-- CALENDARIO DE ANIMALES CHINOS -->
 <section class="panel" id="animalCalendar">
     <h2>🐉 Calendario de animales chinos (1945–2033)</h2>
     <p>Consulta qué animal corresponde a cada año.</p>
-    <div id="animalYears" style="
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(115px,1fr));
-        gap:8px;
-        text-align:left;
-    "></div>
+    <div id="animalYears"></div>
 </section>
 
+<!-- ÁREA DE JUEGO -->
 <section id="gameArea">
-
     <div id="hud">
-        <div class="hudItem">🏁 Vuelta: <span id="lap">1/3</span></div>
+        <div class="hudItem">🏁 Vuelta: <span id="lap" style="color:var(--accent);">1/3</span></div>
+        <div class="hudItem">⏱️ Tiempo: <span id="raceTimer">0.0s</span></div>
         <div class="hudItem">⚡ Velocidad: <span id="speed">0</span>%</div>
         <div class="hudItem">🔮 Poderes: <span id="powers">0</span></div>
-        <div class="hudItem">💊 Velocidad: <span id="boosts">0</span></div>
+        <div class="hudItem">💊 Nitro: <span id="boosts">0</span></div>
     </div>
 
-    <canvas id="game" width="900" height="650"></canvas>
+    <div class="canvas-container">
+        <canvas id="game" width="900" height="650"></canvas>
+    </div>
 
     <p id="message">¡Prepárate para correr!</p>
 
-    <div class="controls">
-        W / S: acelerar y frenar · A / D: girar · ESPACIO: usar poder
+    <div class="controls-guide">
+        <b>Teclado (PC):</b> W / ↑ Acelerar · S / ↓ Frenar · A / D / ← → Girar pista · ESPACIO Poder<br>
+        <b>Android / Celular:</b> Usa los botones en pantalla o toca los costados.
     </div>
 
-    <button onclick="restartGame()">REINICIAR CARRERA</button>
+    <!-- CONTROLES TÁCTILES EN PANTALLA (Para Android / Tablets / Pantallas Táctiles) -->
+    <div id="touchControls">
+        <div class="touch-wrapper">
+            <!-- Grupo Izquierdo: Giro de carril -->
+            <div class="touch-cluster">
+                <button id="btnLeft" class="touch-btn btn-steer" aria-label="Girar izquierda">
+                    <span>◀</span>
+                    <span style="font-size:10px;">IZQ</span>
+                </button>
+                <button id="btnRight" class="touch-btn btn-steer" aria-label="Girar derecha">
+                    <span>▶</span>
+                    <span style="font-size:10px;">DER</span>
+                </button>
+            </div>
+
+            <!-- Centro: Botón de Poder Especial -->
+            <div class="touch-cluster">
+                <button id="btnPower" class="touch-btn btn-power" aria-label="Usar poder">
+                    <span>🔮</span>
+                    <span style="font-size:11px;">PODER</span>
+                    <span id="powerBadge" class="badge-count">0</span>
+                </button>
+            </div>
+
+            <!-- Grupo Derecho: Acelerador y Freno -->
+            <div class="touch-cluster">
+                <button id="btnBrake" class="touch-btn btn-brake" aria-label="Frenar">
+                    <span>🛑</span>
+                    <span style="font-size:10px;">FRENO</span>
+                </button>
+                <button id="btnGas" class="touch-btn btn-gas" aria-label="Acelerar">
+                    <span>⚡</span>
+                    <span style="font-size:11px;">GAS</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top:10px;">
+        <button class="primary" onclick="restartGame()">REINICIAR CARRERA</button>
+        <button class="top-btn" onclick="backToMenu()" style="margin-left:8px;">CAMBIAR PERSONAJE</button>
+    </div>
 </section>
 
+<!-- MODAL CÓDIGO QR PARA JUGAR EN ANDROID -->
+<div id="qrModal" class="modal-overlay" onclick="closeQrModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeQrModal()">&times;</button>
+        <h2 style="color:var(--accent); margin-top:0;">📲 Jugar en Android</h2>
+        <p style="font-size:14px; color:#cbd5e1;">Conecta tu celular a la misma red Wi-Fi y escanea el código con tu cámara:</p>
+
+        <div class="qr-box" id="qrContainer">
+            <img id="qrImage" src="/api/qr.svg" alt="Código QR de Zodiac Racing" onerror="showQrFallback()">
+            <div id="qrFallback" style="display:none; color:#111; padding:20px; font-weight:bold;">
+                Abre esta dirección en el navegador de tu celular:
+            </div>
+        </div>
+
+        <div class="server-url-badge" id="serverUrlText">Cargando dirección...</div>
+
+        <div class="step-list">
+            <b>Cómo instalarlo como App en Android:</b><br>
+            1. Abre el enlace arriba en <b>Google Chrome</b> en tu celular.<br>
+            2. Toca los <b>3 puntos (⋮)</b> arriba a la derecha en Chrome.<br>
+            3. Pulsa <b>"Instalar aplicación"</b> o <b>"Agregar a la pantalla principal"</b>.<br>
+            4. ¡Listo! Quedará como un juego instalado que funciona incluso sin internet.
+        </div>
+    </div>
+</div>
+
 <script>
+/* =====================================================================
+   SISTEMA DE AUDIO SINTETIZADO (Web Audio API - 100% Offline y sin archivos)
+   ===================================================================== */
+class SoundEngine {
+    constructor() {
+        this.ctx = null;
+        this.muted = false;
+    }
+
+    init() {
+        if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                this.ctx = new AudioContext();
+            }
+        }
+        if (this.ctx && this.ctx.state === "suspended") {
+            this.ctx.resume();
+        }
+    }
+
+    playTone(freq, type = "sine", duration = 0.12, gainVal = 0.1) {
+        if (this.muted || !this.ctx) return;
+        try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+            gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    playBoost() {
+        this.init();
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+            setTimeout(() => this.playTone(f, "triangle", 0.15, 0.12), i * 45);
+        });
+    }
+
+    playPowerPickup() {
+        this.init();
+        [440, 554.37, 659.25, 880].forEach((f, i) => {
+            setTimeout(() => this.playTone(f, "sine", 0.18, 0.15), i * 50);
+        });
+    }
+
+    playUsePower() {
+        this.init();
+        if (this.muted || !this.ctx) return;
+        try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(250, this.ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1100, this.ctx.currentTime + 0.35);
+            gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.35);
+        } catch(e) {}
+    }
+
+    playLap() {
+        this.init();
+        [587.33, 880, 1174.66].forEach((f, i) => {
+            setTimeout(() => this.playTone(f, "triangle", 0.22, 0.18), i * 75);
+        });
+    }
+
+    playWin() {
+        this.init();
+        const fanfare = [
+            {f: 523.25, d: 0.15}, {f: 659.25, d: 0.15}, {f: 783.99, d: 0.15},
+            {f: 1046.50, d: 0.35}, {f: 880, d: 0.2}, {f: 1046.50, d: 0.55}
+        ];
+        let delay = 0;
+        fanfare.forEach(item => {
+            setTimeout(() => this.playTone(item.f, "triangle", item.d, 0.22), delay);
+            delay += item.d * 1000 + 40;
+        });
+    }
+}
+
+const sounds = new SoundEngine();
+
+function triggerHaptic(pattern) {
+    if ("vibrate" in navigator) {
+        try {
+            navigator.vibrate(pattern);
+        } catch(e) {}
+    }
+}
+
+/* =====================================================================
+   CONFIGURACIÓN DE LA PISTA Y ELEMENTOS DEL ZODIACO
+   ===================================================================== */
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -200,6 +723,7 @@ const animalEmojis = {
 let character = null;
 let player = null;
 let pickups = [];
+let particles = [];
 let keys = {};
 let gameRunning = false;
 let lastTime = 0;
@@ -208,12 +732,17 @@ let totalPowers = 0;
 let totalBoosts = 0;
 let boostTimer = 0;
 let powerTimer = 0;
+let raceStartTime = 0;
+let raceElapsedTime = 0;
 
 const center = {x:450, y:325};
 const outerRadius = 265;
 const innerRadius = 155;
 const trackRadius = 210;
 
+/* =====================================================================
+   CÁLCULOS ZODIACALES Y CALENDARIO
+   ===================================================================== */
 function getWesternSign(day, month) {
     for (const sign of westernSigns) {
         const current = month * 100 + day;
@@ -229,14 +758,10 @@ function getWesternSign(day, month) {
     return westernSigns[0];
 }
 
-// Correspondencia del horóscopo chino según la tabla de años 1945-2033.
-// La secuencia comienza con 1945 = Gallo y se repite cada 12 años.
 function getChineseAnimal(year) {
     if (!Number.isInteger(year) || year < 1945 || year > 2033) {
         return null;
     }
-
-    // 1945 = Gallo, siguiendo exactamente el calendario mostrado.
     const suppliedOrder = [
         "Gallo", "Perro", "Cerdo", "Rata", "Buey", "Tigre",
         "Conejo", "Dragón", "Serpiente", "Caballo", "Cabra", "Mono"
@@ -244,7 +769,6 @@ function getChineseAnimal(year) {
     return suppliedOrder[(year - 1945) % 12];
 }
 
-// Calendario solicitado: 1945 = Gallo y secuencia de 12 animales.
 function renderAnimalYears() {
     const calendar = document.getElementById("animalYears");
     const suppliedOrder = [
@@ -252,11 +776,11 @@ function renderAnimalYears() {
         "Conejo", "Dragón", "Serpiente", "Caballo", "Cabra", "Mono"
     ];
 
+    calendar.innerHTML = "";
     for (let year = 1945; year <= 2033; year++) {
         const animal = suppliedOrder[(year - 1945) % 12];
         const item = document.createElement("div");
-        item.style.cssText =
-            "background:#263b59;padding:8px;border-radius:7px;font-size:14px;";
+        item.className = "year-card";
         item.textContent = `${year}: ${animalEmojis[animal]} ${animal}`;
         calendar.appendChild(item);
     }
@@ -265,6 +789,7 @@ function renderAnimalYears() {
 renderAnimalYears();
 
 function createCharacter() {
+    sounds.init();
     const day = Number(document.getElementById("day").value);
     const month = Number(document.getElementById("month").value);
     const year = Number(document.getElementById("year").value);
@@ -297,27 +822,45 @@ function createCharacter() {
         emoji: animalEmojis[animal]
     };
 
-    document.getElementById("characterInfo").innerHTML = `
-        <h3>Tu corredor está listo</h3>
-        <p>${character.emoji} Animal chino (${year}): <b>${animal}</b></p>
-        <p> Signo: <b>${sign.name}</b></p>
-        <p> Elemento: <b>${sign.element}</b></p>
-        <p> Clase: <b>${className}</b></p>
-        <button onclick="startGame()">COMENZAR CARRERA</button>
+    const infoDiv = document.getElementById("characterInfo");
+    infoDiv.style.display = "block";
+    infoDiv.innerHTML = `
+        <h3 style="margin:4px; color:var(--accent);">¡Tu corredor está listo!</h3>
+        <p style="font-size:17px; margin:6px;">${character.emoji} Animal chino (${year}): <b>${animal}</b></p>
+        <p style="margin:4px;">Signo zodiacal: <b>${sign.name}</b> · Elemento: <b>${sign.element}</b></p>
+        <p style="margin:4px;">Clase de combate: <b>${className}</b></p>
+        <button class="primary" onclick="startGame()" style="font-size:16px; margin-top:10px;">COMENZAR CARRERA 🏁</button>
     `;
 }
 
 function startGame() {
+    sounds.init();
     document.getElementById("menu").style.display = "none";
+    document.getElementById("animalCalendar").style.display = "none";
     document.getElementById("gameArea").style.display = "block";
+    setupTouchControls();
     restartGame();
 }
 
+function backToMenu() {
+    gameRunning = false;
+    document.getElementById("gameArea").style.display = "none";
+    document.getElementById("menu").style.display = "block";
+    document.getElementById("animalCalendar").style.display = "block";
+}
+
+/* =====================================================================
+   BUCLE DE JUEGO Y FÍSICAS DE CONDUCCIÓN REALISTAS
+   ===================================================================== */
 function restartGame() {
+    sounds.init();
     player = {
-        angle: -Math.PI / 2,
+        angle: -Math.PI / 2,        // Inicia en la línea de meta
+        radius: trackRadius,        // Radio inicial: centro del asfalto
+        targetRadius: trackRadius,
         speed: 0,
-        maxSpeed: 150,
+        baseMaxSpeed: 175,
+        maxSpeed: 175,
         color: "#ffd166"
     };
 
@@ -326,25 +869,31 @@ function restartGame() {
     totalBoosts = 0;
     boostTimer = 0;
     powerTimer = 0;
+    particles = [];
     pickups = [];
+    raceStartTime = performance.now();
+    raceElapsedTime = 0;
 
     createPickups();
 
     gameRunning = true;
     lastTime = performance.now();
 
-    document.getElementById("message").textContent = "¡La carrera ha comenzado!";
+    document.getElementById("message").textContent = "¡Acelera para cruzar la meta!";
     updateHUD();
     requestAnimationFrame(gameLoop);
 }
 
 function createPickups() {
-    // 12 poderes y 6 potenciadores por vuelta.
-    // Se colocan alrededor del circuito y reaparecen en cada vuelta.
+    pickups = [];
+    // 18 recolectables distribuidos en los 3 carriles de la pista
+    const laneOffsets = [-24, 0, 24]; // Interior, Centro, Exterior
     for (let i = 0; i < 18; i++) {
-        const angle = (Math.PI * 2 * i) / 18;
+        const angle = (Math.PI * 2 * i) / 18 + 0.15;
+        const laneRadius = trackRadius + laneOffsets[i % 3];
         pickups.push({
             angle,
+            radius: laneRadius,
             type: i % 3 === 0 ? "boost" : "power",
             collected: false
         });
@@ -352,155 +901,91 @@ function createPickups() {
 }
 
 function updateHUD() {
-    document.getElementById("lap").textContent =
-        Math.min(3, Math.floor(lapProgress / (Math.PI * 2)) + 1) + "/3";
+    const currentLap = Math.min(3, Math.floor(lapProgress / (Math.PI * 2)) + 1);
+    document.getElementById("lap").textContent = currentLap + "/3";
 
-    document.getElementById("speed").textContent =
-        Math.round(player.speed / player.maxSpeed * 100);
+    const speedPct = Math.round((player.speed / player.maxSpeed) * 100);
+    document.getElementById("speed").textContent = speedPct;
 
     document.getElementById("powers").textContent = totalPowers;
     document.getElementById("boosts").textContent = totalBoosts;
-}
 
-function drawTrack() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#244b36";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Exterior de la pista.
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, outerRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#565c65";
-    ctx.fill();
-
-    // Interior.
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, innerRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#244b36";
-    ctx.fill();
-
-    // Líneas de la pista.
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, (outerRadius + innerRadius) / 2, 0, Math.PI * 2);
-    ctx.strokeStyle = "#f5f5f5";
-    ctx.lineWidth = 3;
-    ctx.setLineDash([18, 15]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Línea de salida.
-    ctx.save();
-    ctx.translate(center.x, center.y);
-    ctx.rotate(-Math.PI / 2);
-    ctx.fillStyle = "white";
-    for (let i = 0; i < 8; i++) {
-        ctx.fillRect(innerRadius + 5 + (i % 2) * 12, -8 + Math.floor(i / 2) * 4, 12, 4);
+    // Actualizar badge del botón táctil de poder
+    const badge = document.getElementById("powerBadge");
+    if (badge) {
+        badge.textContent = totalPowers;
     }
-    ctx.restore();
-
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 18px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("ZODIAC RACING", center.x, center.y - 15);
-    ctx.font = "14px Arial";
-    ctx.fillText("PISTA ELEMENTAL", center.x, center.y + 12);
-}
-
-function drawPickups() {
-    pickups.forEach(item => {
-        if (item.collected) return;
-
-        const x = center.x + Math.cos(item.angle) * trackRadius;
-        const y = center.y + Math.sin(item.angle) * trackRadius;
-
-        ctx.beginPath();
-        ctx.arc(x, y, 11, 0, Math.PI * 2);
-        ctx.fillStyle = item.type === "boost" ? "#00e5ff" : "#c77dff";
-        ctx.fill();
-
-        ctx.font = "14px Arial";
-        ctx.textAlign = "center";
-        ctx.fillStyle = "#111";
-        ctx.fillText(item.type === "boost" ? "⚡" : "✦", x, y + 5);
-    });
-}
-
-function drawPlayer() {
-    const x = center.x + Math.cos(player.angle) * trackRadius;
-    const y = center.y + Math.sin(player.angle) * trackRadius;
-
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(player.angle + Math.PI / 2);
-
-    ctx.font = "34px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(character.emoji, 0, 0);
-
-    ctx.restore();
-
-    ctx.fillStyle = "#fff";
-    ctx.font = "12px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(character.sign, x, y - 27);
-}
-
-function collectPickups() {
-    pickups.forEach(item => {
-        if (item.collected) return;
-
-        let difference = Math.atan2(
-            Math.sin(player.angle - item.angle),
-            Math.cos(player.angle - item.angle)
-        );
-
-        if (Math.abs(difference) < 0.045) {
-            item.collected = true;
-
-            if (item.type === "boost") {
-                totalBoosts++;
-                boostTimer = 5;
-                player.maxSpeed *= 1.15;
-                document.getElementById("message").textContent =
-                    "⚡ ¡Potenciador de velocidad! +15% durante 5 segundos.";
-            } else {
-                totalPowers++;
-                powerTimer = 4;
-                document.getElementById("message").textContent =
-                    "🔮 ¡Píldora de poder recogida!";
-            }
+    const btnPower = document.getElementById("btnPower");
+    if (btnPower) {
+        if (totalPowers > 0) {
+            btnPower.classList.add("ready");
+        } else {
+            btnPower.classList.remove("ready");
         }
-    });
+    }
+
+    if (gameRunning) {
+        raceElapsedTime = ((performance.now() - raceStartTime) / 1000).toFixed(1);
+        document.getElementById("raceTimer").textContent = raceElapsedTime + "s";
+    }
 }
 
 function update(delta) {
     if (!gameRunning) return;
 
-    if (keys["w"] || keys["ArrowUp"]) {
-        player.speed += 100 * delta;
+    // Aceleración y frenado
+    const isGas = keys["w"] || keys["ArrowUp"] || keys["gas"];
+    const isBrake = keys["s"] || keys["ArrowDown"] || keys["brake"];
+    const isLeft = keys["a"] || keys["ArrowLeft"] || keys["left"];
+    const isRight = keys["d"] || keys["ArrowRight"] || keys["right"];
+
+    if (isGas) {
+        player.speed += 140 * delta;
+        // Partículas de humo al acelerar
+        if (Math.random() < 0.4) {
+            spawnParticle(player.angle, player.radius, "#ffffff", 14, 0.4);
+        }
     } else {
-        player.speed -= 35 * delta;
+        // Fricción natural cuando no se acelera
+        player.speed -= 40 * delta;
     }
 
-    if (keys["s"] || keys["ArrowDown"]) {
-        player.speed -= 100 * delta;
+    if (isBrake) {
+        player.speed -= 160 * delta;
     }
 
+    // Comprobar si está en el pasto (fuera de pista)
+    const onGrass = player.radius < innerRadius + 12 || player.radius > outerRadius - 12;
+    if (onGrass) {
+        // La hierba frena el coche
+        player.speed = Math.min(player.speed, 65);
+        if (Math.random() < 0.35) {
+            spawnParticle(player.angle, player.radius, "#38b000", 12, 0.3);
+            triggerHaptic(15);
+        }
+    }
+
+    // Delimitar velocidad
     player.speed = Math.max(0, Math.min(player.maxSpeed, player.speed));
 
-    let steering = 0;
-    if (keys["a"] || keys["ArrowLeft"]) steering = -1;
-    if (keys["d"] || keys["ArrowRight"]) steering = 1;
+    // Giro de carril (izq = hacia adentro, der = hacia afuera)
+    if (isLeft) {
+        player.radius -= 90 * delta;
+    }
+    if (isRight) {
+        player.radius += 90 * delta;
+    }
 
-    const turnSpeed = player.speed / 150;
-    player.angle += steering * turnSpeed * delta;
+    // Limitar dentro de los límites visuales
+    player.radius = Math.max(innerRadius - 8, Math.min(outerRadius + 8, player.radius));
 
+    // Avance angular alrededor de la pista (física de arco circular)
+    const angularSpeed = player.speed / player.radius;
+    player.angle += angularSpeed * delta;
+
+    // Progreso de vuelta
     const previousLap = Math.floor(lapProgress / (Math.PI * 2));
-
     lapProgress += (player.speed / trackRadius) * delta;
-
     const currentLap = Math.floor(lapProgress / (Math.PI * 2));
 
     if (currentLap > previousLap) {
@@ -509,29 +994,243 @@ function update(delta) {
             return;
         }
 
+        sounds.playLap();
+        triggerHaptic([80, 40, 80]);
+        // Reaparecen los poderes para la siguiente vuelta
         pickups.forEach(item => item.collected = false);
-        document.getElementById("message").textContent =
-            "¡Vuelta completada! Comienza la siguiente.";
+        document.getElementById("message").textContent = `🏁 ¡Vuelta ${currentLap + 1}/3 completada!`;
     }
 
     collectPickups();
 
+    // Temporizadores de boost y poder
     if (boostTimer > 0) {
         boostTimer -= delta;
+        // Estela azul brillante
+        spawnParticle(player.angle, player.radius, "#00e5ff", 18, 0.5);
         if (boostTimer <= 0) {
-            player.maxSpeed = 150;
+            player.maxSpeed = player.baseMaxSpeed;
+            document.getElementById("message").textContent = "Nitro agotado.";
         }
     }
 
     if (powerTimer > 0) {
         powerTimer -= delta;
+        // Estela mágica dorada/morada
+        spawnParticle(player.angle, player.radius, "#e879f9", 20, 0.6);
+        if (powerTimer <= 0) {
+            player.maxSpeed = player.baseMaxSpeed;
+        }
+    }
+
+    // Actualizar partículas
+    for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.life -= delta;
+        p.size *= 0.95;
+        if (p.life <= 0) {
+            particles.splice(i, 1);
+        }
     }
 
     updateHUD();
 }
 
+function spawnParticle(angle, radius, color, size, life) {
+    const x = center.x + Math.cos(angle) * radius;
+    const y = center.y + Math.sin(angle) * radius;
+    particles.push({
+        x: x + (Math.random() - 0.5) * 8,
+        y: y + (Math.random() - 0.5) * 8,
+        color,
+        size,
+        life,
+        maxLife: life
+    });
+}
+
+function collectPickups() {
+    const px = center.x + Math.cos(player.angle) * player.radius;
+    const py = center.y + Math.sin(player.angle) * player.radius;
+
+    pickups.forEach(item => {
+        if (item.collected) return;
+
+        const ix = center.x + Math.cos(item.angle) * item.radius;
+        const iy = center.y + Math.sin(item.angle) * item.radius;
+        const dist = Math.hypot(px - ix, py - iy);
+
+        if (dist < 26) {
+            item.collected = true;
+
+            if (item.type === "boost") {
+                totalBoosts++;
+                boostTimer = 5;
+                player.maxSpeed = player.baseMaxSpeed * 1.25;
+                player.speed = player.maxSpeed;
+                sounds.playBoost();
+                triggerHaptic(40);
+                document.getElementById("message").textContent = "⚡ ¡Nitro activado! +25% de velocidad";
+            } else {
+                totalPowers++;
+                sounds.playPowerPickup();
+                triggerHaptic(50);
+                document.getElementById("message").textContent = "🔮 ¡Píldora de poder recogida! Presiona PODER";
+            }
+        }
+    });
+}
+
+/* =====================================================================
+   DIBUJO EN CANVAS CON ALTA DEFINICIÓN
+   ===================================================================== */
+function drawTrack() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Fondo césped exterior
+    ctx.fillStyle = "#1e3a2b";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Borde exterior de grava/pasto
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, outerRadius + 8, 0, Math.PI * 2);
+    ctx.fillStyle = "#14291e";
+    ctx.fill();
+
+    // Pista de asfalto
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, outerRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "#475569";
+    ctx.fill();
+
+    // Césped interior
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, innerRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "#1e3a2b";
+    ctx.fill();
+
+    // Bordillo interior
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, innerRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "#cbd5e1";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // Bordillo exterior
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, outerRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "#cbd5e1";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // Líneas divisoras de carril (carril central y secundarios)
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, trackRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "#f8fafc";
+    ctx.lineWidth = 3;
+    ctx.setLineDash([16, 14]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Línea de salida/meta cuadriculada
+    ctx.save();
+    ctx.translate(center.x, center.y);
+    ctx.rotate(-Math.PI / 2);
+    const cols = 2;
+    const rows = 10;
+    const cellW = (outerRadius - innerRadius) / rows;
+    for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+            ctx.fillStyle = (c + r) % 2 === 0 ? "#ffffff" : "#0f172a";
+            ctx.fillRect(innerRadius + r * cellW, -8 + c * 8, cellW, 8);
+        }
+    }
+    ctx.restore();
+
+    // Logo central del circuito
+    ctx.fillStyle = "#ffd166";
+    ctx.font = "bold 20px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("🐉 ZODIAC RACING", center.x, center.y - 12);
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "bold 13px Arial";
+    ctx.fillText("CIRCUITO ELEMENTAL", center.x, center.y + 12);
+}
+
+function drawParticles() {
+    particles.forEach(p => {
+        ctx.save();
+        ctx.globalAlpha = p.life / p.maxLife;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    });
+}
+
+function drawPickups() {
+    pickups.forEach(item => {
+        if (item.collected) return;
+
+        const x = center.x + Math.cos(item.angle) * item.radius;
+        const y = center.y + Math.sin(item.angle) * item.radius;
+
+        // Aura pulsante
+        ctx.beginPath();
+        ctx.arc(x, y, 13, 0, Math.PI * 2);
+        ctx.fillStyle = item.type === "boost" ? "rgba(0, 229, 255, 0.4)" : "rgba(199, 125, 255, 0.4)";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, Math.PI * 2);
+        ctx.fillStyle = item.type === "boost" ? "#00e5ff" : "#c77dff";
+        ctx.fill();
+
+        ctx.font = "bold 13px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#0f172a";
+        ctx.fillText(item.type === "boost" ? "⚡" : "✦", x, y);
+    });
+}
+
+function drawPlayer() {
+    const x = center.x + Math.cos(player.angle) * player.radius;
+    const y = center.y + Math.sin(player.angle) * player.radius;
+
+    // Resplandor si tiene boost o poder activo
+    if (boostTimer > 0 || powerTimer > 0) {
+        ctx.beginPath();
+        ctx.arc(x, y, 26, 0, Math.PI * 2);
+        ctx.fillStyle = powerTimer > 0 ? "rgba(232, 121, 249, 0.5)" : "rgba(0, 229, 255, 0.5)";
+        ctx.fill();
+    }
+
+    ctx.save();
+    ctx.translate(x, y);
+    // Orientar hacia la dirección del movimiento tangencial
+    ctx.rotate(player.angle + Math.PI / 2);
+
+    ctx.font = "36px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(character ? character.emoji : "🐉", 0, 0);
+
+    ctx.restore();
+
+    // Etiqueta del signo
+    if (character) {
+        ctx.fillStyle = "#ffd166";
+        ctx.font = "bold 12px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(character.sign, x, y - 26);
+    }
+}
+
 function draw() {
     drawTrack();
+    drawParticles();
     drawPickups();
     drawPlayer();
 }
@@ -555,23 +1254,35 @@ function finishGame() {
     player.speed = 0;
     draw();
 
-    document.getElementById("message").textContent =
-        "🏆 ¡FELICITACIONES! ¡Has completado las 3 vueltas!";
+    sounds.playWin();
+    triggerHaptic([100, 50, 100, 50, 250]);
+
+    document.getElementById("message").innerHTML =
+        `🏆 ¡FELICITACIONES! Has completado las 3 vueltas en <b>${raceElapsedTime}s</b> con tu ${character.emoji} ${character.animal}!`;
 }
 
 function usePower() {
+    sounds.init();
     if (!gameRunning || totalPowers <= 0) return;
 
     totalPowers--;
+    powerTimer = 4;
+    player.maxSpeed = player.baseMaxSpeed * 1.35;
     player.speed = player.maxSpeed;
-    powerTimer = 3;
 
-    document.getElementById("message").textContent =
-        "✨ ¡Poder zodiacal activado!";
+    sounds.playUsePower();
+    triggerHaptic([60, 40, 90]);
+
+    document.getElementById("message").textContent = "✨ ¡PODER ZODIACAL ACTIVADO! Máxima aceleración.";
     updateHUD();
 }
 
+/* =====================================================================
+   MANEJO DE CONTROLES: TECLADO (WINDOWS) Y TÁCTIL (ANDROID)
+   ===================================================================== */
+// Soporte de Teclado físico
 window.addEventListener("keydown", e => {
+    sounds.init();
     const key = e.key.toLowerCase();
     keys[key] = true;
 
@@ -584,6 +1295,150 @@ window.addEventListener("keydown", e => {
 window.addEventListener("keyup", e => {
     keys[e.key.toLowerCase()] = false;
 });
+
+// Soporte de Controles Táctiles Multi-touch
+function bindTouchButton(btnId, keyName, isAction = false, actionFn = null) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+
+    const startHandler = (e) => {
+        e.preventDefault();
+        sounds.init();
+        btn.classList.add("pressed");
+        if (isAction && actionFn) {
+            actionFn();
+        } else {
+            keys[keyName] = true;
+        }
+    };
+
+    const endHandler = (e) => {
+        e.preventDefault();
+        btn.classList.remove("pressed");
+        if (!isAction) {
+            keys[keyName] = false;
+        }
+    };
+
+    btn.addEventListener("touchstart", startHandler, { passive: false });
+    btn.addEventListener("touchend", endHandler, { passive: false });
+    btn.addEventListener("touchcancel", endHandler, { passive: false });
+
+    // También permitir mouse en PC para pruebas
+    btn.addEventListener("mousedown", startHandler);
+    btn.addEventListener("mouseup", endHandler);
+    btn.addEventListener("mouseleave", endHandler);
+}
+
+function setupTouchControls() {
+    bindTouchButton("btnLeft", "left");
+    bindTouchButton("btnRight", "right");
+    bindTouchButton("btnGas", "gas");
+    bindTouchButton("btnBrake", "brake");
+    bindTouchButton("btnPower", null, true, usePower);
+
+    // Detección automática de dispositivo táctil
+    const isTouchDevice = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
+    const touchPanel = document.getElementById("touchControls");
+    if (isTouchDevice) {
+        touchPanel.style.display = "block";
+        document.getElementById("btnToggleTouch").classList.add("active");
+    }
+}
+
+let touchForcedState = null;
+function toggleTouchControls() {
+    const touchPanel = document.getElementById("touchControls");
+    const btn = document.getElementById("btnToggleTouch");
+    if (touchForcedState === null) {
+        touchForcedState = touchPanel.style.display === "block" ? false : true;
+    } else {
+        touchForcedState = !touchForcedState;
+    }
+
+    touchPanel.style.display = touchForcedState ? "block" : "none";
+    btn.textContent = touchForcedState ? "📱 Controles: SI" : "📱 Controles: NO";
+    btn.classList.toggle("active", touchForcedState);
+}
+
+function toggleSound() {
+    sounds.init();
+    sounds.muted = !sounds.muted;
+    const icon = document.getElementById("soundIcon");
+    const btn = document.getElementById("btnSound");
+    if (sounds.muted) {
+        icon.textContent = "🔇";
+        btn.innerHTML = `<span>🔇</span> Sonido: OFF`;
+        btn.classList.remove("active");
+    } else {
+        icon.textContent = "🔊";
+        btn.innerHTML = `<span>🔊</span> Sonido: ON`;
+        btn.classList.add("active");
+        sounds.playTone(600, "sine", 0.1, 0.1);
+    }
+}
+
+function toggleFullscreen() {
+    sounds.init();
+    const docEl = document.documentElement;
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (docEl.requestFullscreen) {
+            docEl.requestFullscreen().catch(() => {});
+        } else if (docEl.webkitRequestFullscreen) {
+            docEl.webkitRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
+}
+
+/* =====================================================================
+   MODAL DE CÓDIGO QR Y CONEXIÓN CON ANDROID
+   ===================================================================== */
+function openQrModal() {
+    sounds.init();
+    const modal = document.getElementById("qrModal");
+    modal.style.display = "flex";
+
+    // Consultar información del servidor local
+    fetch("/api/info")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("serverUrlText").textContent = data.url;
+            document.getElementById("qrImage").src = `/api/qr.svg?t=${Date.now()}`;
+        })
+        .catch(() => {
+            // Si se abrió como archivo local file://
+            const localHref = window.location.href;
+            document.getElementById("serverUrlText").textContent =
+                "Inicia server.py para ver el código QR y conectar tu celular.";
+            showQrFallback();
+        });
+}
+
+function closeQrModal(e) {
+    document.getElementById("qrModal").style.display = "none";
+}
+
+function showQrFallback() {
+    document.getElementById("qrImage").style.display = "none";
+    document.getElementById("qrFallback").style.display = "block";
+}
+
+/* =====================================================================
+   REGISTRO DE SERVICE WORKER PARA PWA (OFFLINE EN ANDROID Y WINDOWS)
+   ===================================================================== */
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+            .then(reg => console.log("Service Worker registrado con éxito:", reg.scope))
+            .catch(err => console.log("Service Worker no registrado (modo local):", err));
+    });
+}
 </script>
 
 </body>

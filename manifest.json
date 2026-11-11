@@ -1,0 +1,32 @@
+{
+  "name": "Zodiac Racing 2D - Elemental Edition",
+  "short_name": "Zodiac Racing",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#101827",
+  "theme_color": "#18263d",
+  "description": "Juego de carreras 2D con animales del zodiaco chino y elementos occidentales para Android y Windows",
+  "categories": ["games", "racing", "arcade"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
