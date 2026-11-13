@@ -771,7 +771,7 @@ canvas {
             </div>
         </div>
 
-        <div id="characterPreview" style="margin-top:12px; font-size:15px; color:var(--accent); background:#1e293b; padding:8px 12px; border-radius:8px; min-height:28px;"></div>
+        <div id="characterPreview" style="margin-top:12px; color:var(--accent);"></div>
     </div>
 
     <!-- MODO LOCAL -->
@@ -1139,8 +1139,24 @@ function getPlayerCharacter() {
 
 function updateCharacterPreview() {
     const char = getPlayerCharacter();
-    document.getElementById("characterPreview").innerHTML =
-        `<b>${char.emoji} ${char.animal}</b> · Signo: <b>${char.sign}</b> (${char.element}) · Clase: <b>${char.className}</b>`;
+    document.getElementById("characterPreview").innerHTML = `
+        <div style="display:flex; align-items:flex-end; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:4px;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+                <span style="font-size:11px; color:#64748b; font-weight:bold; text-transform:uppercase; letter-spacing:1px;">Animal</span>
+                <div style="font-size:26px; font-weight:900; padding:8px 10px; min-width:72px; text-align:center; color:#ffd166; border:2px solid rgba(255,209,102,0.5); border-radius:10px; background:#0f172a; white-space:nowrap;">${char.emoji} ${char.animal}</div>
+            </div>
+            <span style="font-size:30px; color:#475569; margin-bottom:8px;">·</span>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+                <span style="font-size:11px; color:#64748b; font-weight:bold; text-transform:uppercase; letter-spacing:1px;">Signo</span>
+                <div style="font-size:26px; font-weight:900; padding:8px 10px; min-width:72px; text-align:center; color:#ffd166; border:2px solid rgba(255,209,102,0.5); border-radius:10px; background:#0f172a; white-space:nowrap;">${char.sign}</div>
+            </div>
+            <span style="font-size:30px; color:#475569; margin-bottom:8px;">·</span>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+                <span style="font-size:11px; color:#64748b; font-weight:bold; text-transform:uppercase; letter-spacing:1px;">Clase</span>
+                <div style="font-size:26px; font-weight:900; padding:8px 10px; min-width:72px; text-align:center; color:#ffd166; border:2px solid rgba(255,209,102,0.5); border-radius:10px; background:#0f172a; white-space:nowrap;">${char.className}</div>
+            </div>
+        </div>
+    `;
 }
 
 document.getElementById("day").addEventListener("input", updateCharacterPreview);
